@@ -3,64 +3,1878 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Galeria Web</title>
+  <title>Android Market 2 Web</title>
+  <meta
+    name="description"
+    content="Android Market 2 en web: descubre apps retro Android y descarga APKs desde el catalogo."
+  />
   <style>
+    @font-face {
+      font-family: "Ataribaby Light";
+      src:
+        local("Ataribaby Light"),
+        local("AtariBaby Light"),
+        local("Atari Baby Light"),
+        local("Ataribaby-Light");
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --font-main: "Ataribaby Light", "Courier New", monospace;
+      --bg: #ffffff;
+      --bg-soft: #f6f6f6;
+      --card: #ffffff;
+      --line: #bdbdbd;
+      --text: #111111;
+      --muted: #555555;
+      --accent: #4f8e34;
+      --shadow: none;
+      --radius-xl: 2px;
+      --radius-lg: 2px;
+      --radius-md: 2px;
+      --page-max: 1220px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #fff;
-      padding: 24px;
+      padding: 0;
     }
 
-    h1 {
-      margin-top: 0;
-      font-size: 28px;
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-main);
+      line-height: 1.4;
+      overflow-x: hidden;
     }
 
-    .galeria {
-      display: grid;
-      gap: 20px;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      align-items: start;
+    body.modal-open { overflow: hidden; }
+
+    .page {
+      width: min(var(--page-max), calc(100% - 32px));
+      margin: 18px auto 48px;
     }
 
-    figure {
-      margin: 0;
-      background: #1b1b1b;
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 46px;
+      height: 46px;
+      object-fit: cover;
       border-radius: 12px;
-      padding: 12px;
-    }
-
-    img {
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 8px;
+      border: 1px solid var(--line);
       background: #000;
     }
 
-    figcaption {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #cfcfcf;
+    .brand-title {
+      margin: 0;
+      font-size: 1.08rem;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-subtitle {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .header-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      min-width: min(680px, 100%);
+      flex: 1;
+      justify-content: flex-end;
+    }
+
+    .topbar-search {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      min-width: 300px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(12, 28, 21, 0.88);
+      flex: 1 1 320px;
+    }
+
+    .topbar-search input {
+      width: auto;
+      flex: 1;
+      min-width: 0;
+      min-height: 42px;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      font-family: var(--font-main);
+      font-size: 0.9rem;
+    }
+
+    .topbar-search-btn {
+      min-height: 34px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      background: #f5f5f5;
+      color: #111111;
+      font-family: var(--font-main);
+      font-size: 0.8rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .topbar-filter {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 44px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      background: #ffffff;
+      color: #111111;
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+
+    .topbar-filter select {
+      min-height: 34px;
+      border: 1px solid #bdbdbd;
+      border-radius: 2px;
+      background: #ffffff;
+      color: #111111;
+      font-family: var(--font-main);
+      font-size: 0.78rem;
+      padding: 0 6px;
+      outline: none;
+    }
+
+    .action-btn,
+    .download-btn,
+    .chip {
+      border: 1px solid var(--line);
+      text-decoration: none;
+      color: var(--text);
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-main);
+      font-weight: 600;
+    }
+
+    .action-btn {
+      min-height: 44px;
+      padding: 0 14px;
+      background: rgba(13, 31, 24, 0.84);
+    }
+
+    .action-btn.primary {
+      background: linear-gradient(135deg, #1f4f2f, #2c703f);
+      box-shadow: 0 12px 30px rgba(17, 53, 31, 0.45);
+    }
+
+    .hero {
+      margin-top: 8px;
+      padding: 24px;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+      background:
+        linear-gradient(130deg, rgba(35, 76, 51, 0.78), rgba(16, 37, 28, 0.94) 52%),
+        linear-gradient(45deg, rgba(50, 200, 190, 0.2), rgba(136, 214, 79, 0.1));
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 7px 14px;
+      background: rgba(10, 24, 18, 0.72);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      margin: 10px 0 8px;
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      line-height: 1.05;
+      max-width: 16ch;
+    }
+
+    .hero-subtitle {
+      margin: 0;
+      color: #c7e3c7;
+      max-width: 62ch;
+    }
+
+    .hero-tags {
+      margin: 14px 0 18px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .download-btn {
+      min-height: 44px;
+      padding: 0 16px;
+    }
+
+    .download-btn.primary {
+      color: #052308;
+      background: linear-gradient(135deg, #b2f263, #88d64f 55%, #5fc533 100%);
+    }
+
+    .download-btn.secondary {
+      background: rgba(10, 25, 17, 0.9);
+    }
+
+    .hero-shot {
+      display: block;
+      border: 1px solid rgba(153, 225, 116, 0.24);
+      border-radius: 16px;
+      padding: 10px;
+      background: rgba(9, 21, 15, 0.8);
+      width: min(100%, 430px);
+      margin-left: auto;
+      text-decoration: none;
+    }
+
+    .hero-shot img {
+      display: block;
+      width: 100%;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #020803;
+    }
+
+    .hero-badge {
+      width: min(100%, 240px);
+      display: block;
+      margin: 12px 0 0 auto;
+      border-radius: 12px;
+      border: 1px solid rgba(153, 225, 116, 0.24);
+      background: rgba(6, 18, 12, 0.92);
+      padding: 8px;
+    }
+
+    .stats {
+      margin: 18px 0 8px;
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      background: var(--card);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .stat-value {
+      margin: 0;
+      font-size: 1.3rem;
+      color: #d8f3be;
+    }
+
+    .stat-label {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .panel {
+      margin-top: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--card);
+      padding: 16px;
+      box-shadow: 0 10px 28px rgba(3, 10, 7, 0.28);
+    }
+
+    .panel-title {
+      margin: 0 0 12px;
+      font-size: 1rem;
+    }
+
+    .panel-subtitle {
+      margin: 0 0 12px;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .controls {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .field {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(151, 224, 114, 0.28);
+      border-radius: 12px;
+      min-height: 45px;
+      padding: 0 12px;
+      background: rgba(8, 20, 14, 0.9);
+    }
+
+    .field select {
+      width: 100%;
+      min-height: 43px;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      font-family: var(--font-main);
+      font-size: 0.9rem;
+    }
+
+    .field option {
+      color: #dcefd8;
+      background: #0f2219;
+    }
+
+    .cards {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+
+    .app-card {
+      border: 1px solid rgba(147, 220, 113, 0.24);
+      border-radius: 14px;
+      background: rgba(14, 34, 26, 0.95);
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .app-cover {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 14px 14px 0;
+      min-height: 90px;
+    }
+
+    .app-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 14px;
+      object-fit: cover;
+      border: 1px solid rgba(147, 220, 113, 0.22);
+      background: #000;
+      flex-shrink: 0;
+    }
+
+    .app-name {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.2;
       word-break: break-word;
+    }
+
+    .app-dev {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .app-rating {
+      margin: 8px 0 0;
+      color: #fae27c;
+      letter-spacing: 0.06em;
+      font-size: 0.88rem;
+    }
+
+    .app-meta {
+      margin-top: 10px;
+      padding: 10px 14px 0;
+      border-top: 1px solid rgba(153, 225, 116, 0.14);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .mini-chip {
+      font-size: 0.73rem;
+      color: #c9e7c5;
+      border: 1px solid rgba(132, 214, 100, 0.26);
+      border-radius: 999px;
+      padding: 4px 9px;
+      background: rgba(15, 36, 27, 0.95);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .mini-chip.verified {
+      color: #0e2713;
+      background: linear-gradient(120deg, #9eea5f, #72d53f);
+      border-color: rgba(184, 239, 136, 0.7);
+      font-weight: 700;
+    }
+
+    .app-desc {
+      margin: 0;
+      padding: 10px 14px 0;
+      color: #b7d3b8;
+      font-size: 0.86rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 62px;
+      flex-grow: 1;
+    }
+
+    .app-actions {
+      display: flex;
+      gap: 8px;
+      padding: 12px 14px 14px;
+    }
+
+    .app-actions button,
+    .app-actions a {
+      flex: 1;
+      min-height: 40px;
+      border: 1px solid rgba(163, 232, 127, 0.42);
+      border-radius: 10px;
+      font-family: var(--font-main);
+      font-size: 0.83rem;
+      font-weight: 600;
+      text-decoration: none;
+      color: var(--text);
+      background: rgba(16, 39, 28, 0.9);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .app-actions a.install {
+      color: #072d10;
+      background: linear-gradient(120deg, #9de55a, #7ed64a);
+      border-color: rgba(184, 239, 136, 0.62);
+    }
+
+    .empty-box {
+      border: 1px dashed rgba(151, 224, 114, 0.34);
+      border-radius: 14px;
+      padding: 20px 14px;
+      text-align: center;
+      color: #b8d6b9;
+      font-size: 0.92rem;
+      background: rgba(9, 22, 16, 0.76);
+    }
+
+    .logo-wall {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .logo-item {
+      border: 1px solid rgba(153, 225, 116, 0.22);
+      border-radius: 12px;
+      background: rgba(10, 25, 18, 0.9);
+      padding: 10px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 132px;
+      justify-content: center;
+      cursor: pointer;
+      font-family: var(--font-main);
+      appearance: none;
+      width: 100%;
+    }
+
+    .logo-item:hover,
+    .logo-item:focus-visible {
+      border-color: #8b8b8b;
+      outline: none;
+    }
+
+    .logo-item.active {
+      border-color: #333333 !important;
+      background: #ececec !important;
+    }
+
+    .logo-item img {
+      max-width: 100%;
+      max-height: 62px;
+      object-fit: contain;
+      margin: 0 auto;
+      display: block;
+    }
+
+    .logo-item span {
+      font-size: 0.75rem;
+      color: #bddbbf;
+      line-height: 1.25;
+    }
+
+    .footer {
+      margin-top: 22px;
+      text-align: center;
+      color: #89aa8c;
+      font-size: 0.8rem;
+    }
+
+    .modal-layer {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 4, 0.76);
+      backdrop-filter: blur(7px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      z-index: 40;
+    }
+
+    .modal-layer.hidden { display: none; }
+
+    .modal-card {
+      width: min(900px, 100%);
+      max-height: calc(100vh - 30px);
+      overflow: auto;
+      border-radius: 20px;
+      border: 1px solid rgba(166, 233, 132, 0.3);
+      background: linear-gradient(170deg, rgba(20, 43, 33, 0.95), rgba(9, 21, 16, 0.96));
+      box-shadow: 0 26px 50px rgba(0, 0, 0, 0.55);
+      padding: 16px;
+    }
+
+    .modal-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 10px;
+    }
+
+    .modal-title {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .modal-close {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(153, 225, 116, 0.32);
+      background: rgba(14, 32, 24, 0.9);
+      color: var(--text);
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 14px;
+    }
+
+    .modal-media,
+    .modal-info {
+      border: 1px solid rgba(153, 225, 116, 0.24);
+      border-radius: 14px;
+      background: rgba(8, 18, 13, 0.9);
+      padding: 12px;
+    }
+
+    .modal-main-shot {
+      width: 100%;
+      border-radius: 12px;
+      object-fit: cover;
+      aspect-ratio: 16 / 9;
+      background: #010804;
+    }
+
+    .modal-thumbs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .modal-thumbs img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid rgba(153, 225, 116, 0.22);
+      cursor: pointer;
+      background: #020a06;
+    }
+
+    .modal-thumbs img.active {
+      border-color: rgba(191, 243, 152, 0.85);
+      box-shadow: 0 0 0 2px rgba(191, 243, 152, 0.26);
+    }
+
+    .modal-meta-list {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .modal-meta-list p {
+      margin: 0;
+      font-size: 0.84rem;
+      color: #bfdcc0;
+      background: rgba(13, 31, 23, 0.95);
+      border: 1px solid rgba(153, 225, 116, 0.14);
+      border-radius: 10px;
+      padding: 8px 10px;
+    }
+
+    .modal-desc {
+      margin: 10px 0 0;
+      color: #bfd9bf;
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .modal-actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .modal-actions a,
+    .modal-actions button {
+      flex: 1;
+      min-width: 160px;
+      min-height: 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(153, 225, 116, 0.35);
+      color: var(--text);
+      text-decoration: none;
+      font-family: var(--font-main);
+      font-weight: 700;
+      font-size: 0.84rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: rgba(14, 33, 24, 0.95);
+    }
+
+    .modal-actions a.primary {
+      color: #072d10;
+      background: linear-gradient(120deg, #9de55a, #7ed64a);
+      border-color: rgba(190, 243, 151, 0.75);
+    }
+
+    .modal-actions a.disabled {
+      pointer-events: none;
+      opacity: 0.58;
+      background: rgba(19, 41, 30, 0.82);
+      color: #b3cdb5;
+    }
+
+    /* Tema blanco plano y retro */
+    .site-header,
+    .hero,
+    .panel,
+    .stat,
+    .app-card,
+    .empty-box,
+    .logo-item,
+    .modal-card,
+    .modal-media,
+    .modal-info,
+    .field,
+    .topbar-search,
+    .hero-shot,
+    .hero-badge {
+      background: #ffffff !important;
+      box-shadow: none !important;
+      border-color: #bdbdbd !important;
+    }
+
+    .modal-layer {
+      background: rgba(255, 255, 255, 0.92) !important;
+      backdrop-filter: none !important;
+    }
+
+    .action-btn,
+    .action-btn.primary,
+    .download-btn,
+    .download-btn.primary,
+    .download-btn.secondary,
+    .app-actions button,
+    .app-actions a,
+    .app-actions a.install,
+    .modal-actions a,
+    .modal-actions button,
+    .modal-actions a.primary,
+    .chip,
+    .mini-chip,
+    .mini-chip.verified,
+    .modal-close {
+      background: #f5f5f5 !important;
+      color: #111111 !important;
+      border-color: #b5b5b5 !important;
+      box-shadow: none !important;
+    }
+
+    .brand-logo,
+    .topbar-search,
+    .action-btn,
+    .download-btn,
+    .chip,
+    .hero-shot,
+    .hero-shot img,
+    .hero-badge,
+    .stat,
+    .panel,
+    .field,
+    .app-card,
+    .app-icon,
+    .mini-chip,
+    .app-actions button,
+    .app-actions a,
+    .empty-box,
+    .logo-item,
+    .modal-card,
+    .modal-close,
+    .modal-media,
+    .modal-info,
+    .modal-main-shot,
+    .modal-thumbs img,
+    .modal-meta-list p,
+    .modal-actions a,
+    .modal-actions button {
+      border-radius: 2px !important;
+    }
+
+    .hero,
+    .hero-subtitle,
+    .panel-subtitle,
+    .brand-subtitle,
+    .stat-label,
+    .app-dev,
+    .app-desc,
+    .footer,
+    .modal-desc,
+    .modal-meta-list p,
+    .app-rating {
+      color: #444444 !important;
+    }
+
+    .brand-title,
+    .hero-title,
+    .panel-title,
+    .app-name,
+    .modal-title,
+    .topbar-search input,
+    .field select,
+    .topbar-search-btn {
+      color: #111111 !important;
+    }
+
+    .hero {
+      background-image: none !important;
+      border: none !important;
+    }
+
+    /* Ajuste solicitado: market 2 a la izquierda, sin borde y fundido con fondo */
+    .hero {
+      grid-template-columns: 0.85fr 1.15fr;
+    }
+
+    .hero-content {
+      order: 2;
+    }
+
+    .hero-visual {
+      order: 1;
+      justify-self: start;
+      align-self: center;
+    }
+
+    .hero-shot {
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      width: min(100%, 460px);
+    }
+
+    .hero-shot img {
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      mix-blend-mode: multiply;
+      opacity: 0.97;
+    }
+
+    .hero-badge {
+      margin: 10px 0 0 0 !important;
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+    }
+
+    @media (max-width: 1040px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-shot,
+      .hero-badge { margin-right: auto; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .modal-body { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 680px) {
+      .page {
+        width: min(var(--page-max), calc(100% - 20px));
+        margin-top: 12px;
+      }
+
+      .hero { padding: 18px; }
+      .stats,
+      .controls { grid-template-columns: 1fr; }
+
+      .header-actions { width: 100%; justify-content: stretch; }
+      .topbar-search { min-width: 100%; flex-basis: 100%; }
+      .topbar-filter { flex: 1 1 calc(50% - 8px); }
+      .header-actions .action-btn { flex: 1; }
     }
   </style>
 </head>
 <body>
-  <h1>Imágenes en /web</h1>
+  <div class="page" id="inicio">
+    <header class="site-header">
+      <div class="header-actions">
+        <div class="topbar-search">
+          <span>🔎</span>
+          <input id="topbarSearchInput" type="search" placeholder="Buscar app o developer..." />
+          <button id="topbarSearchBtn" class="topbar-search-btn" type="button">Buscar</button>
+        </div>
+        <label class="topbar-filter" for="categoryFilter">
+          Categoria
+          <select id="categoryFilter">
+            <option value="all">Todas</option>
+            <option value="apps">Apps</option>
+            <option value="games">Games</option>
+            <option value="books">Books</option>
+            <option value="movies">Movies</option>
+          </select>
+        </label>
+        <label class="topbar-filter" for="sortFilter">
+          Orden
+          <select id="sortFilter">
+            <option value="alpha">A-Z</option>
+            <option value="stars">Mejor valoradas</option>
+            <option value="android">Android minimo</option>
+          </select>
+        </label>
+        <a class="action-btn" href="#catalogo">Catalogo</a>
+        <a class="action-btn primary" id="headerMainDownload" href="#" target="_blank" rel="noopener">Descargar Market APK</a>
+      </div>
+    </header>
 
-  <section class="galeria">
-    <figure>
-      <img src="android-logo-white.jpg" alt="android-logo-white" />
-      <figcaption>android-logo-white.jpg</figcaption>
-    </figure>
+    <section class="hero">
+      <div class="hero-content">
+        <h2 class="hero-title">Instala APKs como en la app original</h2>
+        <p class="hero-subtitle">
+          Esta web replica el nucleo de Android Market 2: carga <strong>apps.txt</strong> remoto,
+          muestra recomendadas y permite instalar cada app desde su enlace real.
+        </p>
+      </div>
 
-    <figure>
-      <img src="market 2.png" alt="market 2" />
-      <figcaption>market 2.png</figcaption>
-    </figure>
-  </section>
+      <div class="hero-visual">
+        <a class="hero-shot" id="heroHomeLink" href="#inicio" aria-label="Ir al inicio">
+          <img src="market 2.png" alt="Vista de Android Market 2" />
+        </a>
+        <img class="hero-badge" src="avaibleinandroidmarket.webp" alt="Disponible en Android Market" />
+      </div>
+    </section>
+
+    <section class="panel">
+      <h3 class="panel-title">Destacadas</h3>
+      <p class="panel-subtitle">Top recomendado del feed, como en la app Android.</p>
+      <div id="recommendedGrid" class="cards"></div>
+    </section>
+
+    <section class="panel" id="catalogo" hidden>
+      <h3 class="panel-title">Catalogo completo</h3>
+      <p class="panel-subtitle">Pulsa "Instalar" para abrir la descarga APK o la tienda.</p>
+      <div id="catalogGrid" class="cards"></div>
+    </section>
+
+    <section class="panel" id="versions">
+      <h3 class="panel-title">Logos y versiones de Android</h3>
+      <p class="panel-subtitle" id="logoFilterStatus">Pulsa una version para ver sus apps.</p>
+      <div id="logoWall" class="logo-wall"></div>
+    </section>
+
+    <footer class="footer">
+      <p>Android Market 2 Web | <span id="footerYear"></span></p>
+    </footer>
+  </div>
+
+  <div id="appModal" class="modal-layer hidden" aria-hidden="true">
+    <article class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-top">
+        <h3 class="modal-title" id="modalTitle">Detalle app</h3>
+        <button class="modal-close" id="modalCloseBtn" type="button" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="modal-body">
+        <section class="modal-media">
+          <img id="modalMainShot" class="modal-main-shot" src="market 2.png" alt="Captura principal" />
+          <div id="modalThumbs" class="modal-thumbs"></div>
+        </section>
+        <section class="modal-info">
+          <div class="modal-meta-list">
+            <p id="modalDeveloper">Developer: --</p>
+            <p id="modalStars">Rating: --</p>
+            <p id="modalCategory">Categoria: --</p>
+            <p id="modalAndroid">Min Android: --</p>
+            <p id="modalVersion">Version: --</p>
+            <p id="modalVerified">Verificado: --</p>
+          </div>
+          <p class="modal-desc" id="modalDescription">Sin descripcion disponible.</p>
+          <div class="modal-actions">
+            <a id="modalInstallBtn" class="primary" href="#" target="_blank" rel="noopener">Instalar</a>
+            <button id="modalCopyBtn" type="button">Copiar enlace</button>
+          </div>
+        </section>
+      </div>
+    </article>
+  </div>
+
+  <script>
+    const APPS_TXT_CANDIDATES = [
+      "https://raw.githubusercontent.com/rdr-retro/Android-Market-2-Engine/main/apps.txt",
+      "https://github.com/rdr-retro/Android-Market-2-Engine/raw/refs/heads/main/apps.txt",
+      "https://github.com/rdr-retro/Android-Market-2-Engine/blob/main/apps.txt?raw=1",
+      "https://cdn.jsdelivr.net/gh/rdr-retro/Android-Market-2-Engine@main/apps.txt",
+      "https://raw.githack.com/rdr-retro/Android-Market-2-Engine/main/apps.txt"
+    ];
+    const APPS_TXT_API_URL =
+      "https://api.github.com/repos/rdr-retro/Android-Market-2-Engine/contents/apps.txt?ref=main";
+    const ENGINE_BASE_URL =
+      "https://raw.githubusercontent.com/rdr-retro/Android-Market-2-Engine/main/";
+
+    const ANDROID_LOGOS = [
+      { file: "android text logo.png", label: "Todas las versiones", filterVersion: "" },
+      { file: "Android_Cupcake_Logo.svg", label: "Android 1.5 Cupcake", filterVersion: "1.5" },
+      { file: "Android_Donut_Logo.svg", label: "Android 1.6 Donut", filterVersion: "1.6" },
+      { file: "Android_Eclair_Logo.svg", label: "Android 2.0 Eclair", filterVersion: "2.0" },
+      { file: "Logotipo_de_Android_Froyo.png", label: "Android 2.2 Froyo", filterVersion: "2.2" },
+      { file: "Android-Gingerbread.webp", label: "Android 2.3 Gingerbread", filterVersion: "2.3" },
+      { file: "honeycomb.png", label: "Android 3.x Honeycomb", filterVersion: "3.x" },
+      { file: "Android_Ice_Cream_Sandwich_Logo.png", label: "Android 4.0 ICS", filterVersion: "4.0" },
+      { file: "Android_Jelly_Bean_Logo.png", label: "Android 4.1 Jelly Bean", filterVersion: "4.1" },
+      { file: "kitkat.webp", label: "Android 4.4 KitKat", filterVersion: "4.4" },
+      { file: "Android_Lollipop_5.png", label: "Android 5 Lollipop", filterVersion: "5" },
+      { file: "marshmallow.png", label: "Android 6 Marshmallow", filterVersion: "6" },
+      { file: "Android-Version-Logo-2016.png", label: "Android 7 Nougat", filterVersion: "7" },
+      { file: "Android_Oreo_8.1_logo.svg", label: "Android 8.1 Oreo", filterVersion: "8.1" },
+      { file: "Android_P_logo.png", label: "Android 9 Pie", filterVersion: "9" },
+      { file: "AndroidQlogo.png", label: "Android 10 Q", filterVersion: "10" },
+      { file: "Android_11_Developer_Preview_logo.svg.png", label: "Android 11 DP", filterVersion: "11" },
+      { file: "Android_12_Developer_Preview_logo.svg.png", label: "Android 12 DP", filterVersion: "12" },
+      { file: "Android_13_Developer_Preview_logo.svg.png", label: "Android 13 DP", filterVersion: "13" },
+      { file: "Android_14_official_logo.png", label: "Android 14", filterVersion: "14" },
+      { file: "Android_15_Developer_Preview_logo.png", label: "Android 15 DP", filterVersion: "15" },
+      { file: "Android_16_Developer_Preview_Logo.png", label: "Android 16 DP", filterVersion: "16" }
+    ];
+
+    const FALLBACK_APP_ICON = "android-logo-white.jpg";
+    const FALLBACK_SHOT = "market 2.png";
+
+    const state = {
+      iconCacheBuster: null,
+      sourceLabel: null,
+      marketSpec: null,
+      allApps: [],
+      recommendedApps: [],
+      normalApps: [],
+      query: "",
+      category: "all",
+      sort: "alpha",
+      showAllCatalog: false,
+      selectedAndroidVersionToken: "",
+      selectedAndroidVersionLabel: "",
+      currentModalApp: null
+    };
+
+    const dom = {
+      topbarSearchInput: document.getElementById("topbarSearchInput"),
+      topbarSearchBtn: document.getElementById("topbarSearchBtn"),
+      categoryFilter: document.getElementById("categoryFilter"),
+      sortFilter: document.getElementById("sortFilter"),
+      heroHomeLink: document.getElementById("heroHomeLink"),
+      headerMainDownload: document.getElementById("headerMainDownload"),
+      recommendedGrid: document.getElementById("recommendedGrid"),
+      catalogSection: document.getElementById("catalogo"),
+      catalogGrid: document.getElementById("catalogGrid"),
+      logoWall: document.getElementById("logoWall"),
+      logoFilterStatus: document.getElementById("logoFilterStatus"),
+      footerYear: document.getElementById("footerYear"),
+      appModal: document.getElementById("appModal"),
+      modalCloseBtn: document.getElementById("modalCloseBtn"),
+      modalTitle: document.getElementById("modalTitle"),
+      modalMainShot: document.getElementById("modalMainShot"),
+      modalThumbs: document.getElementById("modalThumbs"),
+      modalDeveloper: document.getElementById("modalDeveloper"),
+      modalStars: document.getElementById("modalStars"),
+      modalCategory: document.getElementById("modalCategory"),
+      modalAndroid: document.getElementById("modalAndroid"),
+      modalVersion: document.getElementById("modalVersion"),
+      modalVerified: document.getElementById("modalVerified"),
+      modalDescription: document.getElementById("modalDescription"),
+      modalInstallBtn: document.getElementById("modalInstallBtn"),
+      modalCopyBtn: document.getElementById("modalCopyBtn")
+    };
+
+    function normalizeKey(input) {
+      return String(input || "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, "")
+        .replace(/[_-]+/g, "");
+    }
+
+    function normalizeType(input) {
+      if (!input) return null;
+      const value = normalizeKey(input);
+      if (["recommended", "recomendada", "recomendado", "featured", "true", "1", "yes", "si"].includes(value)) {
+        return "recommended";
+      }
+      if (["normal", "app", "apps", "false", "0", "no"].includes(value)) {
+        return "normal";
+      }
+      return null;
+    }
+
+    function normalizeCategory(input) {
+      const value = normalizeKey(input);
+      if (["app", "apps", "aplicaciones"].includes(value)) return "apps";
+      if (["game", "games", "juego", "juegos"].includes(value)) return "games";
+      if (["book", "books", "libro", "libros"].includes(value)) return "books";
+      if (["movie", "movies", "pelicula", "peliculas"].includes(value)) return "movies";
+      return "apps";
+    }
+
+    function parseVerifyFlag(input) {
+      const value = normalizeKey(input);
+      return ["on", "true", "1", "yes", "si", "verified"].includes(value);
+    }
+
+    function encodePath(path) {
+      return String(path || "")
+        .split("/")
+        .filter(Boolean)
+        .map((segment) => encodeURIComponent(segment))
+        .join("/");
+    }
+
+    function normalizeGithubRawUrl(url) {
+      const trimmed = String(url || "").trim();
+      if (!trimmed) return "";
+
+      const blob = trimmed.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.*)$/i);
+      if (blob) {
+        return "https://raw.githubusercontent.com/" + blob[1] + "/" + blob[2] + "/" + blob[3] + "/" + encodePath(blob[4].split("?")[0]);
+      }
+
+      const heads = trimmed.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+)\/raw\/refs\/heads\/([^/]+)\/(.*)$/i);
+      if (heads) {
+        return "https://raw.githubusercontent.com/" + heads[1] + "/" + heads[2] + "/" + heads[3] + "/" + encodePath(heads[4].split("?")[0]);
+      }
+
+      return trimmed;
+    }
+
+    function stringHash(text) {
+      let hash = 0;
+      for (let i = 0; i < text.length; i += 1) {
+        hash = (hash << 5) - hash + text.charCodeAt(i);
+        hash |= 0;
+      }
+      return String(Math.abs(hash));
+    }
+
+    function appendCacheBuster(url) {
+      if (!url || !state.iconCacheBuster) return url;
+      const lower = url.toLowerCase();
+      const github = lower.includes("raw.githubusercontent.com/") || lower.includes("github.com/");
+      if (!github) return url;
+      const sep = url.includes("?") ? "&" : "?";
+      return url + sep + "v=" + encodeURIComponent(state.iconCacheBuster);
+    }
+
+    function resolveAssetUrl(rawValue) {
+      const clean = String(rawValue || "").trim();
+      if (!clean) return "";
+      const normalized = normalizeGithubRawUrl(clean);
+      if (/^https?:\/\//i.test(normalized)) return appendCacheBuster(normalized);
+      return appendCacheBuster(ENGINE_BASE_URL + encodePath(clean));
+    }
+
+    function starsToGlyph(rawStars) {
+      if (!rawStars) return "☆☆☆☆☆";
+      const value = String(rawStars);
+      if (value.includes("★") || value.includes("☆")) return value;
+      const n = parseFloat(value.replace(",", "."));
+      if (Number.isNaN(n)) return "☆☆☆☆☆";
+      const full = Math.max(0, Math.min(5, Math.floor(n)));
+      return "★".repeat(full) + "☆".repeat(5 - full);
+    }
+
+    function parseAndroidApi(minAndroidRaw) {
+      const cleaned = String(minAndroidRaw || "").trim().toLowerCase().replace(/^android\s*/, "");
+      if (!cleaned) return 1;
+      const asInt = parseInt(cleaned, 10);
+      if (!Number.isNaN(asInt) && asInt >= 1 && asInt <= 100) return asInt;
+      const map = [
+        ["1.0", 1], ["1.1", 2], ["1.5", 3], ["1.6", 4], ["2.0", 5], ["2.1", 7], ["2.2", 8],
+        ["2.3.3", 10], ["2.3", 9], ["3.0", 11], ["3.1", 12], ["3.2", 13], ["4.0.3", 15], ["4.0", 14],
+        ["4.1", 16], ["4.2", 17], ["4.3", 18], ["4.4", 19], ["5.0", 21], ["5.1", 22], ["6.0", 23],
+        ["7.0", 24], ["7.1", 25], ["8.0", 26], ["8.1", 27], ["9", 28], ["10", 29], ["11", 30],
+        ["12.1", 32], ["12", 31], ["13", 33], ["14", 34], ["15", 35]
+      ];
+      for (const [prefix, api] of map) {
+        if (cleaned.startsWith(prefix)) return api;
+      }
+      return 1;
+    }
+
+    function normalizeAndroidVersionToken(raw) {
+      return String(raw || "")
+        .trim()
+        .toLowerCase()
+        .replace(/^android\s*/, "")
+        .replace(/[^0-9.x]/g, "");
+    }
+
+    function matchesAndroidVersionFilter(minAndroidRaw, filterToken) {
+      if (!filterToken) return true;
+      const appToken = normalizeAndroidVersionToken(minAndroidRaw);
+      if (!appToken) return false;
+      const wanted = String(filterToken).trim().toLowerCase();
+
+      if (wanted.endsWith(".x")) {
+        const major = wanted.slice(0, -2);
+        return appToken === major || appToken.startsWith(major + ".");
+      }
+
+      return appToken === wanted || appToken.startsWith(wanted + ".");
+    }
+
+    function compareApps(a, b) {
+      return (
+        a.name.localeCompare(b.name, "es", { sensitivity: "base" }) ||
+        a.developer.localeCompare(b.developer, "es", { sensitivity: "base" }) ||
+        a.packageName.localeCompare(b.packageName, "es", { sensitivity: "base" })
+      );
+    }
+
+    function parseMarketSpec(rawText) {
+      if (!rawText) return null;
+      let modernVersion = "";
+      let modernPackage = "";
+      let gingerVersion = "";
+      let gingerPackage = "";
+      let waiting = "";
+
+      const lines = rawText.replace(/\r\n/g, "\n").split("\n");
+      for (const sourceLine of lines) {
+        const line = sourceLine.trim();
+        if (!line || line.startsWith("#")) continue;
+        const eq = line.indexOf("=");
+        const dd = line.indexOf(":");
+        const i = eq > 0 ? eq : dd > 0 ? dd : -1;
+        if (i <= 0 || i >= line.length - 1) continue;
+
+        const key = normalizeKey(line.slice(0, i)).replace(/\./g, "");
+        const value = line.slice(i + 1).trim();
+        if (!value) continue;
+
+        if (key === "marketversion") { modernVersion = value; waiting = "modern"; continue; }
+        if (key === "market23version") { gingerVersion = value; waiting = "ginger"; continue; }
+        if (key === "package") {
+          if (waiting === "modern") modernPackage = value;
+          if (waiting === "ginger") gingerPackage = value;
+          waiting = "";
+          continue;
+        }
+        if (key === "marketpackage") { modernPackage = value; if (waiting === "modern") waiting = ""; }
+        if (key === "market23package") { gingerPackage = value; if (waiting === "ginger") waiting = ""; }
+      }
+
+      const main = modernVersion && modernPackage ? { requiredVersion: modernVersion, packageValue: modernPackage } : null;
+      const alt = gingerVersion && gingerPackage ? { requiredVersion: gingerVersion, packageValue: gingerPackage } : null;
+      return main || alt;
+    }
+
+    function parseAppsTxt(rawText) {
+      if (!rawText) return { recommended: [], normal: [] };
+
+      const blocks = rawText.replace(/\r\n/g, "\n").split(/\n\s*\n/);
+      const rows = [];
+      let hasExplicitType = false;
+
+      for (const block of blocks) {
+        const lines = block
+          .split("\n")
+          .map((line) => line.trim())
+          .filter((line) => line && !line.startsWith("#"));
+
+        if (!lines.length) continue;
+
+        if (lines.length === 1 && lines[0].includes(",")) {
+          const parts = lines[0].split(",").map((part) => part.trim());
+          if (parts.length >= 5) {
+            const extra = parts.slice(5);
+            const type = extra.map(normalizeType).find(Boolean) || null;
+            const description = extra.find((item) => !normalizeType(item)) || "";
+            if (type) hasExplicitType = true;
+
+            rows.push({
+              app: {
+                id: "",
+                name: parts[0],
+                developer: parts[1],
+                stars: parts[2],
+                iconName: parts[3],
+                screenshot1: "",
+                screenshot2: "",
+                screenshot3: "",
+                category: "apps",
+                minAndroid: "",
+                appVersion: "",
+                packageName: parts[4],
+                description,
+                isVerified: false
+              },
+              type
+            });
+          }
+          continue;
+        }
+
+        const values = {};
+        for (const line of lines) {
+          const eq = line.indexOf("=");
+          const dd = line.indexOf(":");
+          const i = eq > 0 ? eq : dd > 0 ? dd : -1;
+          if (i <= 0 || i >= line.length - 1) continue;
+          values[normalizeKey(line.slice(0, i))] = line.slice(i + 1).trim();
+        }
+
+        if (!values.name) continue;
+
+        const type = normalizeType(values.type || values.section || values.group || values.recommended);
+        if (type) hasExplicitType = true;
+
+        rows.push({
+          app: {
+            id: "",
+            name: values.name,
+            developer: values.developer || values.dev || "Unknown",
+            stars: values.stars || values.starts || "0",
+            iconName: values.iconname || values.icon || "",
+            screenshot1: values.screenshot1 || values.screen1 || values.capture1 || "",
+            screenshot2: values.screenshot2 || values.screen2 || values.capture2 || "",
+            screenshot3: values.screenshot3 || values.screen3 || values.capture3 || "",
+            category: normalizeCategory(values.category || values.categoria || values.cat),
+            minAndroid: values.minandroid || values.androidmin || values.androidversion || values.minsdk || values.versionandroid || "",
+            appVersion: values.appversion || values.appver || values.version || values.versionname || "",
+            packageName: values.package || values.packagename || "",
+            description: values.description || values.desc || values.descripcion || values.descripccion || "",
+            isVerified: parseVerifyFlag(values.verify || values.verified)
+          },
+          type
+        });
+      }
+
+      rows.forEach((row, index) => {
+        row.app.id = [row.app.name || "app", row.app.developer || "dev", row.app.appVersion || "0", String(index)]
+          .join("__")
+          .toLowerCase()
+          .replace(/[^a-z0-9_]+/g, "_");
+      });
+
+      if (!rows.length) return { recommended: [], normal: [] };
+
+      if (!hasExplicitType) {
+        return {
+          recommended: rows.slice(0, 4).map((r) => r.app).sort(compareApps),
+          normal: rows.slice(4).map((r) => r.app).sort(compareApps)
+        };
+      }
+
+      const recommended = rows.filter((r) => r.type === "recommended").map((r) => r.app);
+      const normal = rows.filter((r) => r.type !== "recommended").map((r) => r.app);
+
+      if (recommended.length < 4 && normal.length > 0) {
+        const needed = 4 - recommended.length;
+        recommended.push(...normal.splice(0, needed));
+      }
+
+      if (recommended.length > 4) {
+        const overflow = recommended.splice(4);
+        normal.unshift(...overflow);
+      }
+
+      recommended.sort(compareApps);
+      normal.sort(compareApps);
+      return { recommended, normal };
+    }
+
+    function isLikelyPackageName(value) {
+      if (!value || /^https?:\/\//i.test(value)) return false;
+      if (!value.includes(".")) return false;
+      return /^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z0-9_]+)+$/.test(value);
+    }
+
+    function buildInstallInfo(rawTarget) {
+      const clean = String(rawTarget || "").trim();
+      if (!clean) return { href: "", label: "No disponible", type: "none" };
+
+      const normalized = normalizeGithubRawUrl(clean);
+      if (/^https?:\/\//i.test(normalized)) {
+        const lower = normalized.toLowerCase();
+        if (lower.includes(".apk")) return { href: normalized, label: "Descargar APK", type: "apk" };
+        if (lower.includes("mediafire.com")) return { href: normalized, label: "Abrir MediaFire", type: "mediafire" };
+        return { href: normalized, label: "Abrir enlace", type: "url" };
+      }
+
+      if (normalized.toLowerCase().includes(".apk")) {
+        return { href: ENGINE_BASE_URL + encodePath(normalized), label: "Descargar APK", type: "apk" };
+      }
+
+      if (isLikelyPackageName(normalized)) {
+        return {
+          href: "https://play.google.com/store/apps/details?id=" + encodeURIComponent(normalized),
+          label: "Abrir Play Store",
+          type: "package"
+        };
+      }
+
+      return { href: "", label: "No disponible", type: "none" };
+    }
+
+    function buildMarketDownloadInfo() {
+      const spec = state.marketSpec;
+      if (!spec || !spec.packageValue) {
+        return { href: ENGINE_BASE_URL + "market.apk", label: "Descargar Market APK" };
+      }
+      const install = buildInstallInfo(spec.packageValue);
+      return {
+        href: install.href || ENGINE_BASE_URL + "market.apk",
+        label: "Descargar Market APK v" + (spec.requiredVersion || "?")
+      };
+    }
+
+    async function fetchText(url, timeoutMs = 13000) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        const response = await fetch(url, {
+          signal: controller.signal,
+          headers: { Accept: "text/plain,application/json;q=0.9,*/*;q=0.8" }
+        });
+        if (!response.ok) return null;
+        return await response.text();
+      } catch (_error) {
+        return null;
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+
+    function decodeBase64Utf8(base64) {
+      const clean = String(base64 || "").replace(/\n/g, "");
+      if (!clean) return null;
+      const binary = atob(clean);
+      const bytes = Uint8Array.from(binary, (ch) => ch.charCodeAt(0));
+      return new TextDecoder().decode(bytes);
+    }
+
+    async function loadAppsTxt() {
+      for (const url of APPS_TXT_CANDIDATES) {
+        const text = await fetchText(url, 12000);
+        if (text && text.trim()) return { text, source: url };
+      }
+
+      const apiRaw = await fetchText(APPS_TXT_API_URL, 12000);
+      if (!apiRaw) return { text: null, source: "sin conexion" };
+
+      try {
+        const json = JSON.parse(apiRaw);
+        return { text: decodeBase64Utf8(json.content || ""), source: APPS_TXT_API_URL };
+      } catch (_error) {
+        return { text: null, source: "sin conexion" };
+      }
+    }
+
+    function createEmptyBox(text) {
+      const el = document.createElement("div");
+      el.className = "empty-box";
+      el.textContent = text;
+      return el;
+    }
+
+    function categoryLabel(value) {
+      return ({ apps: "Apps", games: "Games", books: "Books", movies: "Movies" })[value] || "Apps";
+    }
+
+    function safeText(value, fallback) {
+      const clean = String(value || "").trim();
+      return clean || fallback;
+    }
+
+    function makeImage(src, alt, className, fallbackSrc) {
+      const img = document.createElement("img");
+      img.src = src || fallbackSrc;
+      img.alt = alt;
+      if (className) img.className = className;
+      if (fallbackSrc) {
+        img.addEventListener("error", () => {
+          if (img.src.endsWith(fallbackSrc)) return;
+          img.src = fallbackSrc;
+        });
+      }
+      return img;
+    }
+
+    function appToSearchText(app) {
+      return [app.name, app.developer, app.description, app.category, app.minAndroid].join(" ").toLowerCase();
+    }
+
+    function sortAppsForView(apps) {
+      const clone = apps.slice();
+      if (state.sort === "stars") {
+        clone.sort((a, b) => {
+          const left = parseFloat(String(a.stars).replace(",", ".")) || 0;
+          const right = parseFloat(String(b.stars).replace(",", ".")) || 0;
+          return right - left || compareApps(a, b);
+        });
+      } else if (state.sort === "android") {
+        clone.sort((a, b) => parseAndroidApi(a.minAndroid) - parseAndroidApi(b.minAndroid) || compareApps(a, b));
+      } else {
+        clone.sort(compareApps);
+      }
+      return clone;
+    }
+
+    function getFilteredApps(baseApps) {
+      const query = state.query.trim().toLowerCase();
+      return sortAppsForView(
+        baseApps.filter((app) => {
+          if (state.category !== "all" && app.category !== state.category) return false;
+          if (
+            state.selectedAndroidVersionToken &&
+            !matchesAndroidVersionFilter(app.minAndroid, state.selectedAndroidVersionToken)
+          ) {
+            return false;
+          }
+          if (!query) return true;
+          return appToSearchText(app).includes(query);
+        })
+      );
+    }
+
+    function getCatalogBaseApps() {
+      if (state.selectedAndroidVersionToken) return state.allApps;
+      if (state.showAllCatalog) return state.allApps;
+      return state.recommendedApps;
+    }
+
+    function renderAppCards(target, apps) {
+      target.innerHTML = "";
+      if (!apps.length) {
+        target.appendChild(createEmptyBox("No hay resultados para este filtro."));
+        return;
+      }
+
+      const frag = document.createDocumentFragment();
+      apps.forEach((app) => {
+        const install = buildInstallInfo(app.packageName);
+
+        const card = document.createElement("article");
+        card.className = "app-card";
+
+        const cover = document.createElement("div");
+        cover.className = "app-cover";
+        cover.appendChild(makeImage(resolveAssetUrl(app.iconName), app.name, "app-icon", FALLBACK_APP_ICON));
+
+        const info = document.createElement("div");
+        const title = document.createElement("h4");
+        title.className = "app-name";
+        title.textContent = safeText(app.name, "Sin nombre");
+        const dev = document.createElement("p");
+        dev.className = "app-dev";
+        dev.textContent = safeText(app.developer, "Developer desconocido");
+        const rating = document.createElement("p");
+        rating.className = "app-rating";
+        rating.textContent = starsToGlyph(app.stars);
+        info.append(title, dev, rating);
+        cover.appendChild(info);
+
+        const meta = document.createElement("div");
+        meta.className = "app-meta";
+        [
+          categoryLabel(app.category),
+          "Android " + safeText(app.minAndroid, "?"),
+          "v" + safeText(app.appVersion, "?")
+        ].forEach((text) => {
+          const chip = document.createElement("span");
+          chip.className = "mini-chip";
+          chip.textContent = text;
+          meta.appendChild(chip);
+        });
+        if (app.isVerified) {
+          const verified = document.createElement("span");
+          verified.className = "mini-chip verified";
+          verified.textContent = "Verificada";
+          meta.appendChild(verified);
+        }
+
+        const desc = document.createElement("p");
+        desc.className = "app-desc";
+        desc.textContent = safeText(app.description, "Sin descripcion.");
+
+        const actions = document.createElement("div");
+        actions.className = "app-actions";
+        const details = document.createElement("button");
+        details.type = "button";
+        details.textContent = "Detalles";
+        details.addEventListener("click", () => openAppModal(app));
+
+        const installBtn = document.createElement("a");
+        installBtn.className = "install";
+        installBtn.target = "_blank";
+        installBtn.rel = "noopener";
+        installBtn.textContent = install.label;
+        if (install.href) {
+          installBtn.href = install.href;
+        } else {
+          installBtn.href = "#";
+          installBtn.style.pointerEvents = "none";
+          installBtn.style.opacity = "0.58";
+        }
+
+        actions.append(details, installBtn);
+        card.append(cover, meta, desc, actions);
+        frag.appendChild(card);
+      });
+
+      target.appendChild(frag);
+    }
+
+    function updateStats() {
+      /* Metricas ocultas por solicitud */
+    }
+
+    function setMainDownloadButtons() {
+      const main = buildMarketDownloadInfo();
+      dom.headerMainDownload.href = main.href;
+      dom.headerMainDownload.textContent = main.label;
+    }
+
+    function renderAll() {
+      renderAppCards(dom.recommendedGrid, getFilteredApps(state.recommendedApps));
+      const showCatalog = state.showAllCatalog || Boolean(state.selectedAndroidVersionToken);
+      if (dom.catalogSection) {
+        dom.catalogSection.hidden = !showCatalog;
+      }
+      if (showCatalog) {
+        renderAppCards(dom.catalogGrid, getFilteredApps(getCatalogBaseApps()));
+      } else {
+        dom.catalogGrid.innerHTML = "";
+      }
+      updateLogoFilterStatus();
+    }
+
+    function resetToInitialHomeState() {
+      state.query = "";
+      state.category = "all";
+      state.sort = "alpha";
+      state.showAllCatalog = false;
+      state.selectedAndroidVersionToken = "";
+      state.selectedAndroidVersionLabel = "";
+
+      dom.topbarSearchInput.value = "";
+      dom.categoryFilter.value = "all";
+      dom.sortFilter.value = "alpha";
+
+      renderLogoWall();
+      renderAll();
+    }
+
+    function setupFilters() {
+      function syncTopbarState() {
+        state.query = dom.topbarSearchInput.value || "";
+        state.category = dom.categoryFilter.value || "all";
+        state.sort = dom.sortFilter.value || "alpha";
+      }
+
+      function applySearchFromInput() {
+        syncTopbarState();
+        state.showAllCatalog = true;
+        renderAll();
+      }
+
+      function applyTopbarFilterChange() {
+        syncTopbarState();
+        renderAll();
+      }
+
+      dom.topbarSearchBtn.addEventListener("click", applySearchFromInput);
+      dom.topbarSearchInput.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter") return;
+        applySearchFromInput();
+      });
+      dom.categoryFilter.addEventListener("change", applyTopbarFilterChange);
+      dom.sortFilter.addEventListener("change", applyTopbarFilterChange);
+
+      if (dom.heroHomeLink) {
+        dom.heroHomeLink.addEventListener("click", (event) => {
+          event.preventDefault();
+          resetToInitialHomeState();
+          const home = document.getElementById("inicio");
+          if (home) {
+            home.scrollIntoView({ behavior: "smooth", block: "start" });
+          } else {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
+        });
+      }
+    }
+
+    function openAppModal(app) {
+      state.currentModalApp = app;
+      const install = buildInstallInfo(app.packageName);
+
+      dom.modalTitle.textContent = safeText(app.name, "Detalle app");
+      dom.modalDeveloper.textContent = "Developer: " + safeText(app.developer, "Unknown");
+      dom.modalStars.textContent = "Rating: " + starsToGlyph(app.stars);
+      dom.modalCategory.textContent = "Categoria: " + categoryLabel(app.category);
+      dom.modalAndroid.textContent = "Min Android: " + safeText(app.minAndroid, "?");
+      dom.modalVersion.textContent = "Version: " + safeText(app.appVersion, "?");
+      dom.modalVerified.textContent = "Verificada: " + (app.isVerified ? "Si" : "No");
+      dom.modalDescription.textContent = safeText(app.description, "Sin descripcion.");
+
+      dom.modalInstallBtn.textContent = install.label;
+      if (install.href) {
+        dom.modalInstallBtn.href = install.href;
+        dom.modalInstallBtn.classList.remove("disabled");
+      } else {
+        dom.modalInstallBtn.href = "#";
+        dom.modalInstallBtn.classList.add("disabled");
+      }
+
+      const shots = [
+        resolveAssetUrl(app.screenshot1) || resolveAssetUrl(app.iconName) || FALLBACK_SHOT,
+        resolveAssetUrl(app.screenshot2) || resolveAssetUrl(app.iconName) || FALLBACK_SHOT,
+        resolveAssetUrl(app.screenshot3) || resolveAssetUrl(app.iconName) || FALLBACK_SHOT
+      ];
+
+      dom.modalMainShot.src = shots[0];
+      dom.modalMainShot.alt = "Captura de " + safeText(app.name, "app");
+      dom.modalMainShot.onerror = () => { dom.modalMainShot.src = FALLBACK_SHOT; };
+
+      dom.modalThumbs.innerHTML = "";
+      shots.forEach((src, idx) => {
+        const thumb = makeImage(src, "Captura " + (idx + 1), "", FALLBACK_SHOT);
+        if (idx === 0) thumb.classList.add("active");
+        thumb.addEventListener("click", () => {
+          dom.modalMainShot.src = src;
+          Array.from(dom.modalThumbs.children).forEach((el) => el.classList.remove("active"));
+          thumb.classList.add("active");
+        });
+        dom.modalThumbs.appendChild(thumb);
+      });
+
+      dom.appModal.classList.remove("hidden");
+      dom.appModal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("modal-open");
+    }
+
+    function closeModal() {
+      state.currentModalApp = null;
+      dom.appModal.classList.add("hidden");
+      dom.appModal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("modal-open");
+    }
+
+    function setupModal() {
+      dom.modalCloseBtn.addEventListener("click", closeModal);
+      dom.appModal.addEventListener("click", (event) => {
+        if (event.target === dom.appModal) closeModal();
+      });
+      window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeModal();
+      });
+
+      dom.modalCopyBtn.addEventListener("click", async () => {
+        const app = state.currentModalApp;
+        if (!app) return;
+        const install = buildInstallInfo(app.packageName);
+        if (!install.href) return;
+
+        try {
+          await navigator.clipboard.writeText(install.href);
+          dom.modalCopyBtn.textContent = "Enlace copiado";
+        } catch (_error) {
+          dom.modalCopyBtn.textContent = "No se pudo copiar";
+        }
+        setTimeout(() => { dom.modalCopyBtn.textContent = "Copiar enlace"; }, 1200);
+      });
+    }
+
+    function updateLogoFilterStatus() {
+      if (!dom.logoFilterStatus) return;
+      if (!state.selectedAndroidVersionToken) {
+        dom.logoFilterStatus.textContent = "Pulsa una version para ver sus apps.";
+        return;
+      }
+      const total = state.allApps.filter((app) =>
+        matchesAndroidVersionFilter(app.minAndroid, state.selectedAndroidVersionToken)
+      ).length;
+      dom.logoFilterStatus.textContent =
+        "Filtro activo: " +
+        state.selectedAndroidVersionLabel +
+        " (" +
+        total +
+        " apps). Pulsa de nuevo para quitar.";
+    }
+
+    function applyLogoVersionFilter(item) {
+      const token = item.filterVersion || "";
+      if (!token) {
+        state.selectedAndroidVersionToken = "";
+        state.selectedAndroidVersionLabel = "";
+      } else if (state.selectedAndroidVersionToken === token) {
+        state.selectedAndroidVersionToken = "";
+        state.selectedAndroidVersionLabel = "";
+      } else {
+        state.selectedAndroidVersionToken = token;
+        state.selectedAndroidVersionLabel = item.label;
+      }
+
+      state.showAllCatalog = true;
+      state.query = "";
+      dom.topbarSearchInput.value = "";
+      state.category = "all";
+      dom.categoryFilter.value = "all";
+
+      renderLogoWall();
+      renderAll();
+
+      const catalog = document.getElementById("catalogo");
+      if (catalog) {
+        catalog.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    function renderLogoWall() {
+      const frag = document.createDocumentFragment();
+      ANDROID_LOGOS.forEach((item) => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "logo-item";
+        const isAllItem = !item.filterVersion;
+        const isActive =
+          (isAllItem && !state.selectedAndroidVersionToken) ||
+          (!isAllItem && state.selectedAndroidVersionToken === item.filterVersion);
+        if (isActive) {
+          card.classList.add("active");
+        }
+        const img = makeImage(item.file, item.label, "", "android-logo-white.jpg");
+        const label = document.createElement("span");
+        label.textContent = item.label;
+        card.append(img, label);
+        card.addEventListener("click", () => applyLogoVersionFilter(item));
+        frag.appendChild(card);
+      });
+      dom.logoWall.innerHTML = "";
+      dom.logoWall.appendChild(frag);
+      updateLogoFilterStatus();
+    }
+
+    async function bootstrap() {
+      dom.footerYear.textContent = String(new Date().getFullYear());
+      renderLogoWall();
+      setupFilters();
+      setupModal();
+
+      const { text, source } = await loadAppsTxt();
+      state.sourceLabel = source;
+
+      if (!text) {
+        state.allApps = [];
+        state.recommendedApps = [];
+        state.normalApps = [];
+        state.marketSpec = null;
+        setMainDownloadButtons();
+        updateStats();
+        renderAll();
+        return;
+      }
+
+      state.iconCacheBuster = stringHash(text);
+      state.marketSpec = parseMarketSpec(text);
+
+      const parsed = parseAppsTxt(text);
+      state.recommendedApps = parsed.recommended;
+      state.normalApps = parsed.normal;
+      state.allApps = [...parsed.recommended, ...parsed.normal];
+
+      setMainDownloadButtons();
+      updateStats();
+      renderAll();
+    }
+
+    bootstrap();
+  </script>
 </body>
 </html>
