@@ -1026,6 +1026,12 @@
 
     const FALLBACK_APP_ICON = "android-logo-white.jpg";
     const FALLBACK_SHOT = "market 2.png";
+    const MEDIAFIRE_HTML_PROXIES = [
+      (url) => url,
+      (url) => "https://api.allorigins.win/raw?url=" + encodeURIComponent(url)
+    ];
+
+    const mediafireDirectCache = new Map();
 
     const state = {
       iconCacheBuster: null,
@@ -1374,6 +1380,15 @@
       return /^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z0-9_]+)+$/.test(value);
     }
 
+    function isMediaFireUrl(url) {
+      return /mediafire\.com/i.test(String(url || ""));
+    }
+
+    function isDirectMediaFireDownloadUrl(url) {
+      const lower = String(url || "").trim().toLowerCase();
+      return /^https?:\/\/(?:download\d+|dlinks)\.mediafire\.com\//i.test(lower);
+    }
+
     function buildInstallInfo(rawTarget) {
       const clean = String(rawTarget || "").trim();
       if (!clean) return { href: "", label: "No disponible", type: "none" };
@@ -1382,7 +1397,12 @@
       if (/^https?:\/\//i.test(normalized)) {
         const lower = normalized.toLowerCase();
         if (lower.includes(".apk")) return { href: normalized, label: "Descargar APK", type: "apk" };
-        if (lower.includes("mediafire.com")) return { href: normalized, label: "Abrir MediaFire", type: "mediafire" };
+        if (isMediaFireUrl(normalized)) {
+          if (isDirectMediaFireDownloadUrl(normalized)) {
+            return { href: normalized, label: "Descargar APK", type: "apk" };
+          }
+          return { href: normalized, label: "Descargar APK", type: "mediafire" };
+        }
         return { href: normalized, label: "Abrir enlace", type: "url" };
       }
 
@@ -1411,6 +1431,147 @@
         href: install.href || ENGINE_BASE_URL + "market.apk",
         label: "Descargar Market APK v" + (spec.requiredVersion || "?")
       };
+    }
+
+    function extractMediaFireDownloadHref(html) {
+      if (!html) return null;
+
+      const patterns = [
+        /aria-label=["']Download file["'][^>]*href=["']([^"']+)["']/i,
+        /href=["']([^"']+)["'][^>]*aria-label=["']Download file["']/i,
+        /["'](https?:\/\/(?:download\d+|dlinks)\.mediafire\.com\/[^"']+)["']/i
+      ];
+
+      for (const pattern of patterns) {
+        const match = html.match(pattern);
+        if (match && match[1]) return match[1].trim();
+      }
+      return null;
+    }
+
+    function normalizeMediaFireExtractedUrl(rawUrl, pageUrl) {
+      const trimmed = String(rawUrl || "").trim();
+      if (!trimmed) return null;
+
+      const unescaped = trimmed
+        .replace(/&amp;/g, "&")
+        .replace(/\\\//g, "/");
+
+      if (/^https?:\/\//i.test(unescaped)) return unescaped;
+      if (unescaped.startsWith("//")) return "https:" + unescaped;
+      if (unescaped.startsWith("/")) {
+        try {
+          const base = new URL(pageUrl);
+          return base.protocol + "//" + base.host + unescaped;
+        } catch (_error) {
+          return "https://www.mediafire.com" + unescaped;
+        }
+      }
+      return null;
+    }
+
+    async function fetchTextWithTimeout(url, timeoutMs = 15000) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        const response = await fetch(url, {
+          signal: controller.signal,
+          headers: { Accept: "text/html, text/plain;q=0.9, */*;q=0.8" }
+        });
+        if (!response.ok) return null;
+        return await response.text();
+      } catch (_error) {
+        return null;
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+
+    async function downloadMediaFireHtml(urlString) {
+      const urls = new Set();
+      const clean = String(urlString || "").trim();
+      if (clean) urls.add(clean);
+      if (clean.startsWith("https://")) urls.add("http://" + clean.slice(8));
+      if (clean.startsWith("http://")) urls.add("https://" + clean.slice(7));
+
+      for (const baseUrl of urls) {
+        for (const buildProxyUrl of MEDIAFIRE_HTML_PROXIES) {
+          const target = buildProxyUrl(baseUrl);
+          const html = await fetchTextWithTimeout(target);
+          if (!html) continue;
+          if (!/mediafire|download file|download\d+\.mediafire\.com/i.test(html)) continue;
+          return html;
+        }
+      }
+      return null;
+    }
+
+    async function resolveMediaFireDirectUrl(mediafirePageUrl) {
+      const start = normalizeMediaFireExtractedUrl(mediafirePageUrl, mediafirePageUrl);
+      if (!start) return null;
+
+      if (mediafireDirectCache.has(start)) {
+        return mediafireDirectCache.get(start);
+      }
+
+      let currentUrl = start;
+
+      for (let attempt = 0; attempt < 4; attempt += 1) {
+        if (isDirectMediaFireDownloadUrl(currentUrl)) {
+          mediafireDirectCache.set(start, currentUrl);
+          return currentUrl;
+        }
+
+        const html = await downloadMediaFireHtml(currentUrl);
+        if (!html) break;
+
+        const extracted = extractMediaFireDownloadHref(html);
+        if (!extracted) break;
+
+        const normalized = normalizeMediaFireExtractedUrl(extracted, currentUrl);
+        if (!normalized) break;
+
+        if (isDirectMediaFireDownloadUrl(normalized) || !isMediaFireUrl(normalized)) {
+          mediafireDirectCache.set(start, normalized);
+          return normalized;
+        }
+        currentUrl = normalized;
+      }
+
+      mediafireDirectCache.set(start, null);
+      return null;
+    }
+
+    async function openMediaFireInstall(install, triggerElement) {
+      const href = String((install && install.href) || "").trim();
+      if (!href) return;
+
+      const popup = window.open("about:blank", "_blank");
+      if (popup) popup.opener = null;
+
+      const originalText = triggerElement ? triggerElement.textContent : "";
+      if (triggerElement) {
+        triggerElement.textContent = "Resolviendo...";
+        triggerElement.style.pointerEvents = "none";
+      }
+
+      try {
+        const resolved = await resolveMediaFireDirectUrl(href);
+        const targetUrl = resolved || href;
+        if (resolved && triggerElement && triggerElement.tagName === "A") {
+          triggerElement.href = resolved;
+        }
+        if (popup) {
+          popup.location.replace(targetUrl);
+        } else {
+          window.location.assign(targetUrl);
+        }
+      } finally {
+        if (triggerElement) {
+          triggerElement.textContent = originalText || "Descargar APK";
+          triggerElement.style.pointerEvents = "";
+        }
+      }
     }
 
     async function fetchText(url, timeoutMs = 13000) {
@@ -1596,6 +1757,12 @@
         installBtn.textContent = install.label;
         if (install.href) {
           installBtn.href = install.href;
+          if (install.type === "mediafire") {
+            installBtn.addEventListener("click", async (event) => {
+              event.preventDefault();
+              await openMediaFireInstall(install, installBtn);
+            });
+          }
         } else {
           installBtn.href = "#";
           installBtn.style.pointerEvents = "none";
@@ -1704,6 +1871,8 @@
       dom.modalDescription.textContent = safeText(app.description, "Sin descripcion.");
 
       dom.modalInstallBtn.textContent = install.label;
+      dom.modalInstallBtn.dataset.installType = install.type || "";
+      dom.modalInstallBtn.dataset.installHref = install.href || "";
       if (install.href) {
         dom.modalInstallBtn.href = install.href;
         dom.modalInstallBtn.classList.remove("disabled");
@@ -1753,6 +1922,14 @@
       });
       window.addEventListener("keydown", (event) => {
         if (event.key === "Escape") closeModal();
+      });
+
+      dom.modalInstallBtn.addEventListener("click", async (event) => {
+        const type = dom.modalInstallBtn.dataset.installType || "";
+        const href = dom.modalInstallBtn.dataset.installHref || "";
+        if (type !== "mediafire" || !href) return;
+        event.preventDefault();
+        await openMediaFireInstall({ href, type }, dom.modalInstallBtn);
       });
 
       dom.modalCopyBtn.addEventListener("click", async () => {
