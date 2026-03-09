@@ -713,6 +713,53 @@
       color: #b3cdb5;
     }
 
+    .market-variant-card {
+      width: min(440px, 100%);
+      max-height: none;
+      padding: 16px;
+    }
+
+    .market-variant-title {
+      margin: 0 0 8px;
+      font-size: 1.04rem;
+    }
+
+    .market-variant-subtitle {
+      margin: 0 0 12px;
+      color: #bfd9bf;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .market-variant-actions {
+      margin-top: 0;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .market-variant-actions button {
+      min-height: 44px;
+    }
+
+    .market-variant-actions button:disabled {
+      opacity: 0.58;
+      pointer-events: none;
+    }
+
+    .market-variant-cancel {
+      width: 100%;
+      min-height: 40px;
+      margin-top: 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(153, 225, 116, 0.35);
+      color: var(--text);
+      font-family: var(--font-main);
+      font-weight: 700;
+      font-size: 0.84rem;
+      cursor: pointer;
+      background: rgba(14, 33, 24, 0.95);
+    }
+
     .download-progress-layer {
       position: fixed;
       left: 12px;
@@ -791,6 +838,8 @@
     .app-actions a.install,
     .modal-actions a,
     .modal-actions button,
+    .market-variant-actions button,
+    .market-variant-cancel,
     .modal-actions a.primary,
     .chip,
     .mini-chip,
@@ -828,7 +877,9 @@
     .modal-thumbs img,
     .modal-meta-list p,
     .modal-actions a,
-    .modal-actions button {
+    .modal-actions button,
+    .market-variant-actions button,
+    .market-variant-cancel {
       border-radius: 2px !important;
     }
 
@@ -841,6 +892,7 @@
     .app-desc,
     .footer,
     .modal-desc,
+    .market-variant-subtitle,
     .modal-meta-list p,
     .app-rating {
       color: #444444 !important;
@@ -961,10 +1013,15 @@
 
     <section class="hero">
       <div class="hero-content">
-        <h2 class="hero-title">Instala APKs como en la app original</h2>
+        <h2 class="hero-title">Preservacion Historica de las aplicaciones de Android</h2>
         <p class="hero-subtitle">
-          Esta web replica el nucleo de Android Market 2: carga <strong>apps.txt</strong> remoto,
-          muestra recomendadas y permite instalar cada app desde su enlace real.
+          Cualquier dispositivo Android merece seguir funcionando y no terminar en la basura por
+          falta de software compatible. Esta pagina nace para recopilar y conservar apps y juegos
+          clasicos, facilitando que telefonos y tablets antiguos sigan siendo utiles. Nuestro
+          objetivo es la preservacion historica y tecnica del ecosistema Android: documentar,
+          organizar y mantener accesibles aplicaciones que hoy son dificiles de encontrar. Esta
+          iniciativa no busca fomentar la pirateria, sino promover la conservacion responsable y
+          el uso offline en dispositivos Android antiguos.
         </p>
       </div>
 
@@ -1026,6 +1083,18 @@
           </div>
         </section>
       </div>
+    </article>
+  </div>
+
+  <div id="marketVariantModal" class="modal-layer hidden" aria-hidden="true">
+    <article class="modal-card market-variant-card" role="dialog" aria-modal="true" aria-labelledby="marketVariantTitle">
+      <h3 class="modal-title market-variant-title" id="marketVariantTitle">Descargar Market APK</h3>
+      <p class="market-variant-subtitle">Elige que version quieres descargar.</p>
+      <div class="modal-actions market-variant-actions">
+        <button id="marketVariantNormalBtn" type="button">Normal</button>
+        <button id="marketVariantGingerBtn" type="button">Gingerbread</button>
+      </div>
+      <button id="marketVariantCancelBtn" class="market-variant-cancel" type="button">Cancelar</button>
     </article>
   </div>
 
@@ -1096,6 +1165,7 @@
     const mediafireDirectCache = new Map();
     let jsZipReadyPromise = null;
     let downloadProgressHideTimer = null;
+    let pendingMarketVariantResolver = null;
 
     const state = {
       iconCacheBuster: null,
@@ -1140,6 +1210,10 @@
       modalDescription: document.getElementById("modalDescription"),
       modalInstallBtn: document.getElementById("modalInstallBtn"),
       modalCopyBtn: document.getElementById("modalCopyBtn"),
+      marketVariantModal: document.getElementById("marketVariantModal"),
+      marketVariantNormalBtn: document.getElementById("marketVariantNormalBtn"),
+      marketVariantGingerBtn: document.getElementById("marketVariantGingerBtn"),
+      marketVariantCancelBtn: document.getElementById("marketVariantCancelBtn"),
       downloadProgress: document.getElementById("downloadProgress"),
       downloadProgressTitle: document.getElementById("downloadProgressTitle"),
       downloadProgressFill: document.getElementById("downloadProgressFill"),
@@ -1322,9 +1396,11 @@
         if (key === "market23package") { gingerPackage = value; if (waiting === "ginger") waiting = ""; }
       }
 
-      const main = modernVersion && modernPackage ? { requiredVersion: modernVersion, packageValue: modernPackage } : null;
-      const alt = gingerVersion && gingerPackage ? { requiredVersion: gingerVersion, packageValue: gingerPackage } : null;
-      return main || alt;
+      const normal = modernPackage ? { requiredVersion: modernVersion, packageValue: modernPackage } : null;
+      const gingerbread = gingerPackage ? { requiredVersion: gingerVersion, packageValue: gingerPackage } : null;
+
+      if (!normal && !gingerbread) return null;
+      return { normal, gingerbread };
     }
 
     function parseAppsTxt(rawText) {
@@ -1498,16 +1574,96 @@
       return { href: "", label: "No disponible", type: "none" };
     }
 
-    function buildMarketDownloadInfo() {
+    function getMarketVariantSpec(variant) {
       const spec = state.marketSpec;
-      if (!spec || !spec.packageValue) {
-        return { href: ENGINE_BASE_URL + "market.apk", label: "Descargar Market APK" };
+      if (!spec) return null;
+      const requested = normalizeKey(variant);
+      if ((requested === "gingerbread" || requested === "ginger") && spec.gingerbread) {
+        return { variant: "gingerbread", ...spec.gingerbread };
       }
-      const install = buildInstallInfo(spec.packageValue);
+      if (requested === "normal" && spec.normal) {
+        return { variant: "normal", ...spec.normal };
+      }
+      if (spec.normal) return { variant: "normal", ...spec.normal };
+      if (spec.gingerbread) return { variant: "gingerbread", ...spec.gingerbread };
+      return null;
+    }
+
+    function buildMarketDownloadInfo(variant = "normal") {
+      const selected = getMarketVariantSpec(variant);
+      if (!selected || !selected.packageValue) {
+        return { href: ENGINE_BASE_URL + "market.apk", label: "Descargar Market APK", type: "apk", variant: "normal" };
+      }
+      const install = buildInstallInfo(selected.packageValue);
+      const variantLabel = selected.variant === "gingerbread" ? " Gingerbread" : "";
+      const versionLabel = selected.requiredVersion ? " v" + selected.requiredVersion : "";
       return {
         href: install.href || ENGINE_BASE_URL + "market.apk",
-        label: "Descargar Market APK v" + (spec.requiredVersion || "?")
+        label: "Descargar Market APK" + variantLabel + versionLabel,
+        type: install.type || "apk",
+        variant: selected.variant
       };
+    }
+
+    function hasMarketVariant(variant) {
+      const spec = state.marketSpec;
+      if (!spec) return false;
+      const requested = normalizeKey(variant);
+      if (requested === "normal") return Boolean(spec.normal && spec.normal.packageValue);
+      if (requested === "gingerbread" || requested === "ginger") {
+        return Boolean(spec.gingerbread && spec.gingerbread.packageValue);
+      }
+      return false;
+    }
+
+    function closeMarketVariantModal(choice = null) {
+      if (!dom.marketVariantModal) return;
+      dom.marketVariantModal.classList.add("hidden");
+      dom.marketVariantModal.setAttribute("aria-hidden", "true");
+
+      if (pendingMarketVariantResolver) {
+        const resolve = pendingMarketVariantResolver;
+        pendingMarketVariantResolver = null;
+        resolve(choice);
+      }
+    }
+
+    function openMarketVariantModal() {
+      if (!dom.marketVariantModal) return Promise.resolve(null);
+
+      if (pendingMarketVariantResolver) {
+        pendingMarketVariantResolver(null);
+        pendingMarketVariantResolver = null;
+      }
+
+      if (dom.marketVariantNormalBtn) {
+        dom.marketVariantNormalBtn.disabled = !hasMarketVariant("normal");
+      }
+      if (dom.marketVariantGingerBtn) {
+        dom.marketVariantGingerBtn.disabled = !hasMarketVariant("gingerbread");
+      }
+
+      dom.marketVariantModal.classList.remove("hidden");
+      dom.marketVariantModal.setAttribute("aria-hidden", "false");
+
+      return new Promise((resolve) => {
+        pendingMarketVariantResolver = resolve;
+      });
+    }
+
+    async function chooseMarketVariantForDownload() {
+      const hasNormal = hasMarketVariant("normal");
+      const hasGingerbread = hasMarketVariant("gingerbread");
+
+      if (hasNormal && hasGingerbread) {
+        const selected = await openMarketVariantModal();
+        if (selected === "normal" || selected === "gingerbread") return selected;
+        return null;
+      }
+
+      if (hasNormal) return "normal";
+      if (hasGingerbread) return "gingerbread";
+      return "normal";
     }
 
     function hasObbData(app) {
@@ -2274,9 +2430,13 @@
     }
 
     function setMainDownloadButtons() {
-      const main = buildMarketDownloadInfo();
+      const main = buildMarketDownloadInfo("normal");
       dom.headerMainDownload.href = main.href;
-      dom.headerMainDownload.textContent = main.label;
+      dom.headerMainDownload.textContent = "Descargar Market APK";
+      dom.headerMainDownload.title =
+        hasMarketVariant("normal") && hasMarketVariant("gingerbread")
+          ? "Al pulsar podras elegir: normal o gingerbread"
+          : main.label;
     }
 
     function renderAll() {
@@ -2344,6 +2504,29 @@
             home.scrollIntoView({ behavior: "smooth", block: "start" });
           } else {
             window.scrollTo({ top: 0, behavior: "smooth" });
+          }
+        });
+      }
+
+      if (dom.headerMainDownload) {
+        dom.headerMainDownload.addEventListener("click", async (event) => {
+          event.preventDefault();
+          const variant = await chooseMarketVariantForDownload();
+          if (!variant) return;
+
+          const selected = buildMarketDownloadInfo(variant);
+          if (!selected.href) return;
+
+          if (selected.type === "mediafire") {
+            await openMediaFireInstall(selected, dom.headerMainDownload);
+            return;
+          }
+
+          const popup = window.open(selected.href, "_blank");
+          if (popup) {
+            popup.opener = null;
+          } else {
+            window.location.assign(selected.href);
           }
         });
       }
@@ -2417,6 +2600,32 @@
       dom.appModal.classList.add("hidden");
       dom.appModal.setAttribute("aria-hidden", "true");
       document.body.classList.remove("modal-open");
+    }
+
+    function setupMarketVariantModal() {
+      if (!dom.marketVariantModal) return;
+
+      if (dom.marketVariantNormalBtn) {
+        dom.marketVariantNormalBtn.addEventListener("click", () => closeMarketVariantModal("normal"));
+      }
+      if (dom.marketVariantGingerBtn) {
+        dom.marketVariantGingerBtn.addEventListener("click", () => closeMarketVariantModal("gingerbread"));
+      }
+      if (dom.marketVariantCancelBtn) {
+        dom.marketVariantCancelBtn.addEventListener("click", () => closeMarketVariantModal(null));
+      }
+
+      dom.marketVariantModal.addEventListener("click", (event) => {
+        if (event.target === dom.marketVariantModal) {
+          closeMarketVariantModal(null);
+        }
+      });
+
+      window.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") return;
+        if (dom.marketVariantModal.classList.contains("hidden")) return;
+        closeMarketVariantModal(null);
+      });
     }
 
     function setupModal() {
@@ -2536,6 +2745,7 @@
       renderLogoWall();
       setupFilters();
       setupModal();
+      setupMarketVariantModal();
 
       const { text, source } = await loadAppsTxt();
       state.sourceLabel = source;
