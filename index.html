@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Android Market 2 Web</title>
   <meta
     name="description"
-    content="Android Market 2 en web: descubre apps retro Android y descarga APKs desde el catalogo."
+    content="Android Market 2 web: discover retro Android apps and download APKs from the catalog."
   />
   <style>
     @font-face {
@@ -985,13 +985,13 @@
       <div class="header-actions">
         <div class="topbar-search">
           <span>🔎</span>
-          <input id="topbarSearchInput" type="search" placeholder="Buscar app o developer..." />
-          <button id="topbarSearchBtn" class="topbar-search-btn" type="button">Buscar</button>
+          <input id="topbarSearchInput" type="search" placeholder="Search app or developer..." />
+          <button id="topbarSearchBtn" class="topbar-search-btn" type="button">Search</button>
         </div>
         <label class="topbar-filter" for="categoryFilter">
-          Categoria
+          Category
           <select id="categoryFilter">
-            <option value="all">Todas</option>
+            <option value="all">All</option>
             <option value="apps">Apps</option>
             <option value="games">Games</option>
             <option value="books">Books</option>
@@ -999,55 +999,49 @@
           </select>
         </label>
         <label class="topbar-filter" for="sortFilter">
-          Orden
+          Sort
           <select id="sortFilter">
             <option value="alpha">A-Z</option>
-            <option value="stars">Mejor valoradas</option>
-            <option value="android">Android minimo</option>
+            <option value="stars">Top rated</option>
+            <option value="android">Min Android</option>
           </select>
         </label>
-        <a class="action-btn" href="#catalogo">Catalogo</a>
-        <a class="action-btn primary" id="headerMainDownload" href="#" target="_blank" rel="noopener">Descargar Market APK</a>
+        <a class="action-btn" href="#catalogo">Catalog</a>
+        <a class="action-btn primary" id="headerMainDownload" href="#" target="_blank" rel="noopener">Download Market APK</a>
       </div>
     </header>
 
     <section class="hero">
       <div class="hero-content">
-        <h2 class="hero-title">Preservacion Historica de las aplicaciones de Android</h2>
+        <h2 class="hero-title">Historical Preservation of Android applications</h2>
         <p class="hero-subtitle">
-          Cualquier dispositivo Android merece seguir funcionando y no terminar en la basura por
-          falta de software compatible. Esta pagina nace para recopilar y conservar apps y juegos
-          clasicos, facilitando que telefonos y tablets antiguos sigan siendo utiles. Nuestro
-          objetivo es la preservacion historica y tecnica del ecosistema Android: documentar,
-          organizar y mantener accesibles aplicaciones que hoy son dificiles de encontrar. Esta
-          iniciativa no busca fomentar la pirateria, sino promover la conservacion responsable y
-          el uso offline en dispositivos Android antiguos.
+          Any Android device deserves to keep working and not end up in the trash due to a lack of compatible software. This page was created to collect and preserve classic apps and games, making it easier for old phones and tablets to remain useful. Our goal is the historical and technical preservation of the Android ecosystem: documenting, organizing, and keeping accessible applications that are hard to find today. This initiative does not seek to promote piracy, but rather responsible preservation and offline use on old Android devices.
         </p>
       </div>
 
       <div class="hero-visual">
-        <a class="hero-shot" id="heroHomeLink" href="#inicio" aria-label="Ir al inicio">
-          <img src="market 2.png" alt="Vista de Android Market 2" />
+        <a class="hero-shot" id="heroHomeLink" href="#inicio" aria-label="Go to home">
+          <img src="market 2.png" alt="View of Android Market 2" />
         </a>
-        <img class="hero-badge" src="avaibleinandroidmarket.webp" alt="Disponible en Android Market" />
+        <img class="hero-badge" src="avaibleinandroidmarket.webp" alt="Available on Android Market" />
       </div>
     </section>
 
     <section class="panel">
-      <h3 class="panel-title">Destacadas</h3>
-      <p class="panel-subtitle">Top recomendado del feed, como en la app Android.</p>
+      <h3 class="panel-title">Featured</h3>
+      <p class="panel-subtitle">Top recommendations from the feed, just like the Android app.</p>
       <div id="recommendedGrid" class="cards"></div>
     </section>
 
     <section class="panel" id="catalogo" hidden>
-      <h3 class="panel-title">Catalogo completo</h3>
-      <p class="panel-subtitle">Pulsa "Instalar" para abrir la descarga APK o la tienda.</p>
+      <h3 class="panel-title">Full catalog</h3>
+      <p class="panel-subtitle">Click "Install" to open the APK download or store.</p>
       <div id="catalogGrid" class="cards"></div>
     </section>
 
     <section class="panel" id="versions">
-      <h3 class="panel-title">Logos y versiones de Android</h3>
-      <p class="panel-subtitle" id="logoFilterStatus">Pulsa una version para ver sus apps.</p>
+      <h3 class="panel-title">Android logos and versions</h3>
+      <p class="panel-subtitle" id="logoFilterStatus">Click a version to see its apps.</p>
       <div id="logoWall" class="logo-wall"></div>
     </section>
 
@@ -1059,27 +1053,27 @@
   <div id="appModal" class="modal-layer hidden" aria-hidden="true">
     <article class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <div class="modal-top">
-        <h3 class="modal-title" id="modalTitle">Detalle app</h3>
-        <button class="modal-close" id="modalCloseBtn" type="button" aria-label="Cerrar">✕</button>
+        <h3 class="modal-title" id="modalTitle">App details</h3>
+        <button class="modal-close" id="modalCloseBtn" type="button" aria-label="Close">✕</button>
       </div>
       <div class="modal-body">
         <section class="modal-media">
-          <img id="modalMainShot" class="modal-main-shot" src="market 2.png" alt="Captura principal" />
+          <img id="modalMainShot" class="modal-main-shot" src="market 2.png" alt="Main screenshot" />
           <div id="modalThumbs" class="modal-thumbs"></div>
         </section>
         <section class="modal-info">
           <div class="modal-meta-list">
             <p id="modalDeveloper">Developer: --</p>
             <p id="modalStars">Rating: --</p>
-            <p id="modalCategory">Categoria: --</p>
+            <p id="modalCategory">Category: --</p>
             <p id="modalAndroid">Min Android: --</p>
             <p id="modalVersion">Version: --</p>
-            <p id="modalVerified">Verificado: --</p>
+            <p id="modalVerified">Verified: --</p>
           </div>
-          <p class="modal-desc" id="modalDescription">Sin descripcion disponible.</p>
+          <p class="modal-desc" id="modalDescription">No description available.</p>
           <div class="modal-actions">
-            <a id="modalInstallBtn" class="primary" href="#" target="_blank" rel="noopener">Instalar</a>
-            <button id="modalCopyBtn" type="button">Copiar enlace</button>
+            <a id="modalInstallBtn" class="primary" href="#" target="_blank" rel="noopener">Install</a>
+            <button id="modalCopyBtn" type="button">Copy link</button>
           </div>
         </section>
       </div>
@@ -1088,18 +1082,18 @@
 
   <div id="marketVariantModal" class="modal-layer hidden" aria-hidden="true">
     <article class="modal-card market-variant-card" role="dialog" aria-modal="true" aria-labelledby="marketVariantTitle">
-      <h3 class="modal-title market-variant-title" id="marketVariantTitle">Descargar Market APK</h3>
-      <p class="market-variant-subtitle">Elige que version quieres descargar.</p>
+      <h3 class="modal-title market-variant-title" id="marketVariantTitle">Download Market APK</h3>
+      <p class="market-variant-subtitle">Choose which version you want to download.</p>
       <div class="modal-actions market-variant-actions">
         <button id="marketVariantNormalBtn" type="button">Normal</button>
         <button id="marketVariantGingerBtn" type="button">Gingerbread</button>
       </div>
-      <button id="marketVariantCancelBtn" class="market-variant-cancel" type="button">Cancelar</button>
+      <button id="marketVariantCancelBtn" class="market-variant-cancel" type="button">Cancel</button>
     </article>
   </div>
 
   <div id="downloadProgress" class="download-progress-layer hidden" aria-live="polite" aria-atomic="true">
-    <p id="downloadProgressTitle" class="download-progress-title">Preparando descarga...</p>
+    <p id="downloadProgressTitle" class="download-progress-title">Preparing download...</p>
     <div class="download-progress-track">
       <div id="downloadProgressFill" class="download-progress-fill"></div>
     </div>
@@ -1120,7 +1114,7 @@
       "https://raw.githubusercontent.com/rdr-retro/Android-Market-2-Engine/main/";
 
     const ANDROID_LOGOS = [
-      { file: "android text logo.png", label: "Todas las versiones", filterVersion: "" },
+      { file: "android text logo.png", label: "All versions", filterVersion: "" },
       { file: "Android_Cupcake_Logo.svg", label: "Android 1.5 Cupcake", filterVersion: "1.5" },
       { file: "Android_Donut_Logo.svg", label: "Android 1.6 Donut", filterVersion: "1.6" },
       { file: "Android_Eclair_Logo.svg", label: "Android 2.0 Eclair", filterVersion: "2.0" },
@@ -1544,34 +1538,34 @@
 
     function buildInstallInfo(rawTarget) {
       const clean = String(rawTarget || "").trim();
-      if (!clean) return { href: "", label: "No disponible", type: "none" };
+      if (!clean) return { href: "", label: "Not available", type: "none" };
 
       const normalized = normalizeGithubRawUrl(clean);
       if (/^https?:\/\//i.test(normalized)) {
         const lower = normalized.toLowerCase();
-        if (lower.includes(".apk")) return { href: normalized, label: "Descargar APK", type: "apk" };
+        if (lower.includes(".apk")) return { href: normalized, label: "Download APK", type: "apk" };
         if (isMediaFireUrl(normalized)) {
           if (isDirectMediaFireDownloadUrl(normalized)) {
-            return { href: normalized, label: "Descargar APK", type: "apk" };
+            return { href: normalized, label: "Download APK", type: "apk" };
           }
-          return { href: normalized, label: "Descargar APK", type: "mediafire" };
+          return { href: normalized, label: "Download APK", type: "mediafire" };
         }
-        return { href: normalized, label: "Abrir enlace", type: "url" };
+        return { href: normalized, label: "Open link", type: "url" };
       }
 
       if (normalized.toLowerCase().includes(".apk")) {
-        return { href: ENGINE_BASE_URL + encodePath(normalized), label: "Descargar APK", type: "apk" };
+        return { href: ENGINE_BASE_URL + encodePath(normalized), label: "Download APK", type: "apk" };
       }
 
       if (isLikelyPackageName(normalized)) {
         return {
           href: "https://play.google.com/store/apps/details?id=" + encodeURIComponent(normalized),
-          label: "Abrir Play Store",
+          label: "Open Play Store",
           type: "package"
         };
       }
 
-      return { href: "", label: "No disponible", type: "none" };
+      return { href: "", label: "Not available", type: "none" };
     }
 
     function getMarketVariantSpec(variant) {
@@ -1796,7 +1790,7 @@
       }
       dom.downloadProgress.classList.remove("hidden");
       if (dom.downloadProgressTitle) {
-        dom.downloadProgressTitle.textContent = titleText || "Descarga en curso";
+        dom.downloadProgressTitle.textContent = titleText || "Download in progress";
       }
       if (dom.downloadProgressFill) dom.downloadProgressFill.style.width = "0%";
       if (dom.downloadProgressStatus) dom.downloadProgressStatus.textContent = "0%";
@@ -1864,7 +1858,7 @@
 
         const timer = setTimeout(() => {
           script.remove();
-          reject(new Error("Timeout cargando script"));
+          reject(new Error("Timeout loading script"));
         }, timeoutMs);
 
         script.onload = () => {
@@ -1874,7 +1868,7 @@
         script.onerror = () => {
           clearTimeout(timer);
           script.remove();
-          reject(new Error("Error cargando script"));
+          reject(new Error("Error loading script"));
         };
 
         document.head.appendChild(script);
@@ -1894,7 +1888,7 @@
             /* siguiente CDN */
           }
         }
-        throw new Error("No se pudo cargar JSZip");
+        throw new Error("Could not load JSZip");
       })();
 
       try {
@@ -1985,17 +1979,17 @@
       const apkInstall = buildInstallInfo(app.packageName);
       const obbInstall = buildInstallInfo(app.obbUrl);
       if (!apkInstall.href || !obbInstall.href) {
-        window.alert("No hay enlaces validos para APK y OBB en esta app.");
+        window.alert("No valid links for APK and OBB in this app.");
         return;
       }
       if (!isDownloadableInstallType(apkInstall.type) || !isDownloadableInstallType(obbInstall.type)) {
-        window.alert("Los enlaces de APK/OBB deben ser directos (URL o MediaFire).");
+        window.alert("APK/OBB links must be direct (URL or MediaFire).");
         return;
       }
 
       if (triggerElement) triggerElement.dataset.busyDownload = "1";
-      const endAction = beginInstallAction(triggerElement, "Preparando ZIP...");
-      showDownloadProgress("Descarga APK + OBB");
+      const endAction = beginInstallAction(triggerElement, "Preparing ZIP...");
+      showDownloadProgress("Download APK + OBB");
 
       const makeDownloadProgress = (startPercent, endPercent, label) => (loaded, total) => {
         const range = Math.max(1, endPercent - startPercent);
@@ -2007,33 +2001,33 @@
       };
 
       try {
-        setInstallActionText(triggerElement, "Resolviendo enlaces...");
-        updateDownloadProgress(6, "Resolviendo enlaces");
+        setInstallActionText(triggerElement, "Resolving links...");
+        updateDownloadProgress(6, "Resolving links");
         const [JSZipCtor, apkUrl, obbUrl] = await Promise.all([
           ensureJsZipLoaded(),
           resolveInstallDownloadUrl(apkInstall),
           resolveInstallDownloadUrl(obbInstall)
         ]);
-        if (!apkUrl || !obbUrl) throw new Error("No se pudieron resolver los enlaces de descarga.");
+        if (!apkUrl || !obbUrl) throw new Error("Could not resolve download links.");
 
-        setInstallActionText(triggerElement, "Descargando APK...");
-        updateDownloadProgress(12, "Descargando APK");
+        setInstallActionText(triggerElement, "Downloading APK...");
+        updateDownloadProgress(12, "Downloading APK");
         const apkFile = await fetchBinaryWithFallback(apkUrl, {
           timeoutMs: 240000,
-          onProgress: makeDownloadProgress(12, 48, "Descargando APK")
+          onProgress: makeDownloadProgress(12, 48, "Downloading APK")
         });
-        if (!apkFile) throw new Error("No se pudo descargar el APK.");
+        if (!apkFile) throw new Error("Could not download the APK.");
 
-        setInstallActionText(triggerElement, "Descargando OBB...");
-        updateDownloadProgress(50, "Descargando OBB");
+        setInstallActionText(triggerElement, "Downloading OBB...");
+        updateDownloadProgress(50, "Downloading OBB");
         const obbFile = await fetchBinaryWithFallback(obbUrl, {
           timeoutMs: 900000,
-          onProgress: makeDownloadProgress(50, 86, "Descargando OBB")
+          onProgress: makeDownloadProgress(50, 86, "Downloading OBB")
         });
-        if (!apkFile || !obbFile) throw new Error("No se pudieron descargar los archivos APK/OBB.");
+        if (!apkFile || !obbFile) throw new Error("Could not download the APK/OBB files.");
 
-        setInstallActionText(triggerElement, "Creando ZIP...");
-        updateDownloadProgress(90, "Creando ZIP");
+        setInstallActionText(triggerElement, "Creating ZIP...");
+        updateDownloadProgress(90, "Creating ZIP");
         const zip = new JSZipCtor();
         const apkFilename = pickDownloadedFilename("apk", app, apkUrl, apkFile.response);
         const obbFilename = pickDownloadedFilename("obb", app, obbUrl, obbFile.response);
@@ -2045,16 +2039,16 @@
           compression: "STORE"
         }, (meta) => {
           const zipPercent = Number(meta && meta.percent) || 0;
-          updateDownloadProgress(90 + clamp(zipPercent, 0, 100) * 0.09, "Comprimiendo ZIP");
+          updateDownloadProgress(90 + clamp(zipPercent, 0, 100) * 0.09, "Compressing ZIP");
         });
-        updateDownloadProgress(99, "Lanzando descarga");
+        updateDownloadProgress(99, "Launching download");
         triggerBlobDownload(zipBlob, buildBundleZipFilename(app));
-        updateDownloadProgress(100, "Completado");
+        updateDownloadProgress(100, "Completed");
       } catch (error) {
-        console.error("Error creando ZIP APK+OBB", error);
-        const baseMessage = error && error.message ? error.message : "No se pudo crear el ZIP APK+OBB.";
+        console.error("Error creating ZIP APK+OBB", error);
+        const baseMessage = error && error.message ? error.message : "Could not create the ZIP APK+OBB.";
         const fileProtocolHint = window.location.protocol === "file:"
-          ? " Abre esta web con servidor local (http://localhost) para evitar bloqueos del navegador."
+          ? " Open this website with a local server (http://localhost) to avoid browser blocks."
           : "";
         const message = baseMessage + fileProtocolHint;
         updateDownloadProgress(0, "Error");
@@ -2184,7 +2178,7 @@
 
       const originalText = triggerElement ? triggerElement.textContent : "";
       if (triggerElement) {
-        triggerElement.textContent = "Resolviendo...";
+        triggerElement.textContent = "Resolving...";
         triggerElement.style.pointerEvents = "none";
       }
 
@@ -2201,7 +2195,7 @@
         }
       } finally {
         if (triggerElement) {
-          triggerElement.textContent = originalText || "Descargar APK";
+          triggerElement.textContent = originalText || "Download APK";
           triggerElement.style.pointerEvents = "";
         }
       }
@@ -2325,7 +2319,7 @@
     function renderAppCards(target, apps) {
       target.innerHTML = "";
       if (!apps.length) {
-        target.appendChild(createEmptyBox("No hay resultados para este filtro."));
+        target.appendChild(createEmptyBox("No results for this filter."));
         return;
       }
 
@@ -2344,10 +2338,10 @@
         const info = document.createElement("div");
         const title = document.createElement("h4");
         title.className = "app-name";
-        title.textContent = safeText(app.name, "Sin nombre");
+        title.textContent = safeText(app.name, "Unnamed");
         const dev = document.createElement("p");
         dev.className = "app-dev";
-        dev.textContent = safeText(app.developer, "Developer desconocido");
+        dev.textContent = safeText(app.developer, "Unknown developer");
         const rating = document.createElement("p");
         rating.className = "app-rating";
         rating.textContent = starsToGlyph(app.stars);
@@ -2369,7 +2363,7 @@
         if (app.isVerified) {
           const verified = document.createElement("span");
           verified.className = "mini-chip verified";
-          verified.textContent = "Verificada";
+          verified.textContent = "Verified";
           meta.appendChild(verified);
         }
         if (appHasObb) {
@@ -2381,20 +2375,20 @@
 
         const desc = document.createElement("p");
         desc.className = "app-desc";
-        desc.textContent = safeText(app.description, "Sin descripcion.");
+        desc.textContent = safeText(app.description, "No description.");
 
         const actions = document.createElement("div");
         actions.className = "app-actions";
         const details = document.createElement("button");
         details.type = "button";
-        details.textContent = "Detalles";
+        details.textContent = "Details";
         details.addEventListener("click", () => openAppModal(app));
 
         const installBtn = document.createElement("a");
         installBtn.className = "install";
         installBtn.target = "_blank";
         installBtn.rel = "noopener";
-        installBtn.textContent = appHasObb ? "Descargar APK+OBB (.zip)" : install.label;
+        installBtn.textContent = appHasObb ? "Download APK+OBB (.zip)" : install.label;
 
         if (appHasObb) {
           installBtn.href = "#";
@@ -2435,7 +2429,7 @@
       dom.headerMainDownload.textContent = "Descargar Market APK";
       dom.headerMainDownload.title =
         hasMarketVariant("normal") && hasMarketVariant("gingerbread")
-          ? "Al pulsar podras elegir: normal o gingerbread"
+          ? "Clicking will let you choose: normal or gingerbread"
           : main.label;
     }
 
@@ -2537,18 +2531,18 @@
       const install = buildInstallInfo(app.packageName);
       const appHasObb = hasObbData(app);
 
-      dom.modalTitle.textContent = safeText(app.name, "Detalle app");
+      dom.modalTitle.textContent = safeText(app.name, "App details");
       dom.modalDeveloper.textContent = "Developer: " + safeText(app.developer, "Unknown");
       dom.modalStars.textContent = "Rating: " + starsToGlyph(app.stars);
       dom.modalCategory.textContent = "Categoria: " + categoryLabel(app.category);
       dom.modalAndroid.textContent = "Min Android: " + safeText(app.minAndroid, "?");
       dom.modalVersion.textContent = "Version: " + safeText(app.appVersion, "?");
-      dom.modalVerified.textContent = "Verificada: " + (app.isVerified ? "Si" : "No");
-      dom.modalDescription.textContent = safeText(app.description, "Sin descripcion.");
+      dom.modalVerified.textContent = "Verificada: " + (app.isVerified ? "Yes" : "No");
+      dom.modalDescription.textContent = safeText(app.description, "No description.");
 
       dom.modalInstallBtn.dataset.installMode = appHasObb ? "zip_obb" : "normal";
       if (appHasObb) {
-        dom.modalInstallBtn.textContent = "Descargar APK+OBB (.zip)";
+        dom.modalInstallBtn.textContent = "Download APK+OBB (.zip)";
         dom.modalInstallBtn.dataset.installType = "";
         dom.modalInstallBtn.dataset.installHref = "";
         dom.modalInstallBtn.href = "#";
@@ -2575,12 +2569,12 @@
       ];
 
       dom.modalMainShot.src = shots[0];
-      dom.modalMainShot.alt = "Captura de " + safeText(app.name, "app");
+      dom.modalMainShot.alt = "Screenshot of " + safeText(app.name, "app");
       dom.modalMainShot.onerror = () => { dom.modalMainShot.src = FALLBACK_SHOT; };
 
       dom.modalThumbs.innerHTML = "";
       shots.forEach((src, idx) => {
-        const thumb = makeImage(src, "Captura " + (idx + 1), "", FALLBACK_SHOT);
+        const thumb = makeImage(src, "Screenshot " + (idx + 1), "", FALLBACK_SHOT);
         if (idx === 0) thumb.classList.add("active");
         thumb.addEventListener("click", () => {
           dom.modalMainShot.src = src;
@@ -2662,29 +2656,29 @@
 
         try {
           await navigator.clipboard.writeText(install.href);
-          dom.modalCopyBtn.textContent = "Enlace copiado";
+          dom.modalCopyBtn.textContent = "Link copied";
         } catch (_error) {
-          dom.modalCopyBtn.textContent = "No se pudo copiar";
+          dom.modalCopyBtn.textContent = "Could not copy";
         }
-        setTimeout(() => { dom.modalCopyBtn.textContent = "Copiar enlace"; }, 1200);
+        setTimeout(() => { dom.modalCopyBtn.textContent = "Copy link"; }, 1200);
       });
     }
 
     function updateLogoFilterStatus() {
       if (!dom.logoFilterStatus) return;
       if (!state.selectedAndroidVersionToken) {
-        dom.logoFilterStatus.textContent = "Pulsa una version para ver sus apps.";
+        dom.logoFilterStatus.textContent = "Click a version to see its apps.";
         return;
       }
       const total = state.allApps.filter((app) =>
         matchesAndroidVersionFilter(app.minAndroid, state.selectedAndroidVersionToken)
       ).length;
       dom.logoFilterStatus.textContent =
-        "Filtro activo: " +
+        "Active filter: " +
         state.selectedAndroidVersionLabel +
         " (" +
         total +
-        " apps). Pulsa de nuevo para quitar.";
+        " apps). Click again to clear.";
     }
 
     function applyLogoVersionFilter(item) {
