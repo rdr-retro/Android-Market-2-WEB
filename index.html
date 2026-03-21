@@ -986,7 +986,7 @@
   </style>
 </head>
 <body>
-  <div class="page" id="inicio">
+  <div class="page" id="home">
     <header class="site-header">
       <div class="header-actions">
         <div class="topbar-search">
@@ -1012,7 +1012,7 @@
             <option value="android">Min Android</option>
           </select>
         </label>
-        <a class="action-btn" href="#catalogo">Catalog</a>
+        <a class="action-btn" href="#catalog">Catalog</a>
         <a class="action-btn primary" id="headerMainDownload" href="#" target="_blank" rel="noopener">Download Market APK</a>
       </div>
     </header>
@@ -1026,7 +1026,7 @@
       </div>
 
       <div class="hero-visual">
-        <a class="hero-shot" id="heroHomeLink" href="#inicio" aria-label="Go to home">
+        <a class="hero-shot" id="heroHomeLink" href="#home" aria-label="Go to home">
           <img src="market 2.png" alt="View of Android Market 2" />
         </a>
         <img class="hero-badge" src="avaibleinandroidmarket.webp" alt="Available on Android Market" />
@@ -1039,7 +1039,7 @@
       <div id="recommendedGrid" class="cards"></div>
     </section>
 
-    <section class="panel" id="catalogo" hidden>
+    <section class="panel" id="catalog" hidden>
       <h3 class="panel-title">Full catalog</h3>
       <p class="panel-subtitle">Click "Install" to open the APK download or store.</p>
       <div id="catalogGrid" class="cards"></div>
@@ -1191,7 +1191,7 @@
       heroHomeLink: document.getElementById("heroHomeLink"),
       headerMainDownload: document.getElementById("headerMainDownload"),
       recommendedGrid: document.getElementById("recommendedGrid"),
-      catalogSection: document.getElementById("catalogo"),
+      catalogSection: document.getElementById("catalog"),
       catalogGrid: document.getElementById("catalogGrid"),
       logoWall: document.getElementById("logoWall"),
       logoFilterStatus: document.getElementById("logoFilterStatus"),
@@ -1592,14 +1592,14 @@
     function buildMarketDownloadInfo(variant = "normal") {
       const selected = getMarketVariantSpec(variant);
       if (!selected || !selected.packageValue) {
-        return { href: ENGINE_BASE_URL + "market.apk", label: "Descargar Market APK", type: "apk", variant: "normal" };
+        return { href: ENGINE_BASE_URL + "market.apk", label: "Download Market APK", type: "apk", variant: "normal" };
       }
       const install = buildInstallInfo(selected.packageValue);
       const variantLabel = selected.variant === "gingerbread" ? " Gingerbread" : "";
       const versionLabel = selected.requiredVersion ? " v" + selected.requiredVersion : "";
       return {
         href: install.href || ENGINE_BASE_URL + "market.apk",
-        label: "Descargar Market APK" + variantLabel + versionLabel,
+        label: "Download Market APK" + variantLabel + versionLabel,
         type: install.type || "apk",
         variant: selected.variant
       };
@@ -2426,13 +2426,13 @@
     }
 
     function updateStats() {
-      /* Metricas ocultas por solicitud */
+      /* Metrics hidden by request */
     }
 
     function setMainDownloadButtons() {
       const main = buildMarketDownloadInfo("normal");
       dom.headerMainDownload.href = main.href;
-      dom.headerMainDownload.textContent = "Descargar Market APK";
+      dom.headerMainDownload.textContent = "Download Market APK";
       dom.headerMainDownload.title =
         hasMarketVariant("normal") && hasMarketVariant("gingerbread")
           ? "Clicking will let you choose: normal or gingerbread"
@@ -2499,7 +2499,7 @@
         dom.heroHomeLink.addEventListener("click", (event) => {
           event.preventDefault();
           resetToInitialHomeState();
-          const home = document.getElementById("inicio");
+          const home = document.getElementById("home");
           if (home) {
             home.scrollIntoView({ behavior: "smooth", block: "start" });
           } else {
@@ -2540,10 +2540,10 @@
       dom.modalTitle.textContent = safeText(app.name, "App details");
       dom.modalDeveloper.textContent = "Developer: " + safeText(app.developer, "Unknown");
       dom.modalStars.textContent = "Rating: " + starsToGlyph(app.stars);
-      dom.modalCategory.textContent = "Categoria: " + categoryLabel(app.category);
+      dom.modalCategory.textContent = "Category: " + categoryLabel(app.category);
       dom.modalAndroid.textContent = "Min Android: " + safeText(app.minAndroid, "?");
       dom.modalVersion.textContent = "Version: " + safeText(app.appVersion, "?");
-      dom.modalVerified.textContent = "Verificada: " + (app.isVerified ? "Yes" : "No");
+      dom.modalVerified.textContent = "Verified: " + (app.isVerified ? "Yes" : "No");
       dom.modalDescription.textContent = safeText(app.description, "No description.");
 
       dom.modalInstallBtn.dataset.installMode = appHasObb ? "zip_obb" : "normal";
@@ -2709,7 +2709,7 @@
       renderLogoWall();
       renderAll();
 
-      const catalog = document.getElementById("catalogo");
+      const catalog = document.getElementById("catalog");
       if (catalog) {
         catalog.scrollIntoView({ behavior: "smooth", block: "start" });
       }
