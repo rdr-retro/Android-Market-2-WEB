@@ -396,9 +396,10 @@
       width: 60px;
       height: 60px;
       border-radius: 14px;
-      object-fit: cover;
+      object-fit: contain;
+      padding: 4px;
       border: 1px solid rgba(147, 220, 113, 0.22);
-      background: #000;
+      background: #ffffff;
       flex-shrink: 0;
     }
 
@@ -609,8 +610,9 @@
 
     .modal-body {
       display: grid;
-      grid-template-columns: 0.95fr 1.05fr;
-      gap: 14px;
+      grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.92fr);
+      gap: 16px;
+      align-items: start;
     }
 
     .modal-media,
@@ -618,32 +620,95 @@
       border: 1px solid rgba(153, 225, 116, 0.24);
       border-radius: 14px;
       background: rgba(8, 18, 13, 0.9);
-      padding: 12px;
+      padding: 14px;
+    }
+
+    .modal-media-label {
+      margin: 0 0 10px;
+      color: #444444;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .modal-media-hint {
+      margin: 10px 0 0;
+      color: #666666;
+      font-size: 0.8rem;
+    }
+
+    .modal-app-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid rgba(153, 225, 116, 0.18);
+    }
+
+    .modal-app-icon {
+      width: 84px;
+      height: 84px;
+      flex-shrink: 0;
+      object-fit: contain;
+      padding: 8px;
+      border: 1px solid rgba(153, 225, 116, 0.22);
+      background: #ffffff;
+    }
+
+    .modal-app-summary {
+      min-width: 0;
+    }
+
+    .modal-app-name {
+      margin: 0;
+      color: #111111;
+      font-size: 1.15rem;
+      line-height: 1.15;
+      word-break: break-word;
+    }
+
+    .modal-app-subtitle {
+      margin: 6px 0 0;
+      color: #444444;
+      font-size: 0.84rem;
+      line-height: 1.45;
     }
 
     .modal-main-shot {
+      display: block;
       width: 100%;
+      min-height: 320px;
       border-radius: 12px;
-      object-fit: cover;
-      aspect-ratio: 16 / 9;
-      background: #010804;
+      object-fit: contain;
+      aspect-ratio: 16 / 10;
+      padding: 10px;
+      border: 1px solid rgba(153, 225, 116, 0.18);
+      background:
+        linear-gradient(180deg, rgba(248, 248, 248, 0.98), rgba(236, 236, 236, 0.98));
     }
 
     .modal-thumbs {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
       gap: 8px;
-      margin-top: 8px;
+      margin-top: 10px;
+    }
+
+    .modal-thumbs[hidden] {
+      display: none;
     }
 
     .modal-thumbs img {
       width: 100%;
-      aspect-ratio: 16 / 9;
+      min-height: 88px;
+      aspect-ratio: 16 / 10;
       border-radius: 8px;
-      object-fit: cover;
+      object-fit: contain;
+      padding: 6px;
       border: 1px solid rgba(153, 225, 116, 0.22);
       cursor: pointer;
-      background: #020a06;
+      background: #f5f5f5;
     }
 
     .modal-thumbs img.active {
@@ -660,18 +725,21 @@
     .modal-meta-list p {
       margin: 0;
       font-size: 0.84rem;
-      color: #bfdcc0;
-      background: rgba(13, 31, 23, 0.95);
-      border: 1px solid rgba(153, 225, 116, 0.14);
+      color: #111111;
+      background: #ffffff;
+      border: 1px solid #b5b5b5;
       border-radius: 10px;
       padding: 8px 10px;
     }
 
     .modal-desc {
-      margin: 10px 0 0;
+      margin: 12px 0 0;
+      padding-top: 12px;
+      border-top: 1px solid rgba(153, 225, 116, 0.18);
       color: #bfd9bf;
       font-size: 0.9rem;
       line-height: 1.45;
+      white-space: pre-line;
     }
 
     .modal-actions {
@@ -976,6 +1044,10 @@
       .topbar-search { min-width: 100%; flex-basis: 100%; }
       .topbar-filter { flex: 1 1 calc(50% - 8px); }
       .header-actions .action-btn { flex: 1; }
+      .modal-app-head { align-items: flex-start; }
+      .modal-app-icon { width: 72px; height: 72px; }
+      .modal-main-shot { min-height: 220px; }
+      .modal-meta-list { grid-template-columns: 1fr; }
     }
 
     a#headerMainDownload.action-btn.primary {
@@ -1064,10 +1136,19 @@
       </div>
       <div class="modal-body">
         <section class="modal-media">
+          <p class="modal-media-label">Screenshots</p>
           <img id="modalMainShot" class="modal-main-shot" src="market 2.png" alt="Main screenshot" />
+          <p id="modalMediaHint" class="modal-media-hint" hidden>No screenshots available for this app.</p>
           <div id="modalThumbs" class="modal-thumbs"></div>
         </section>
         <section class="modal-info">
+          <div class="modal-app-head">
+            <img id="modalAppIcon" class="modal-app-icon" src="android-logo-white.jpg" alt="App icon" />
+            <div class="modal-app-summary">
+              <h4 class="modal-app-name" id="modalAppName">App name</h4>
+              <p class="modal-app-subtitle" id="modalAppSubtitle">Unknown developer</p>
+            </div>
+          </div>
           <div class="modal-meta-list">
             <p id="modalDeveloper">Developer: --</p>
             <p id="modalStars">Rating: --</p>
@@ -1200,7 +1281,11 @@
       modalCloseBtn: document.getElementById("modalCloseBtn"),
       modalTitle: document.getElementById("modalTitle"),
       modalMainShot: document.getElementById("modalMainShot"),
+      modalMediaHint: document.getElementById("modalMediaHint"),
       modalThumbs: document.getElementById("modalThumbs"),
+      modalAppIcon: document.getElementById("modalAppIcon"),
+      modalAppName: document.getElementById("modalAppName"),
+      modalAppSubtitle: document.getElementById("modalAppSubtitle"),
       modalDeveloper: document.getElementById("modalDeveloper"),
       modalStars: document.getElementById("modalStars"),
       modalCategory: document.getElementById("modalCategory"),
@@ -1303,6 +1388,63 @@
       const normalized = normalizeGithubRawUrl(clean);
       if (/^https?:\/\//i.test(normalized)) return appendCacheBuster(normalized);
       return appendCacheBuster(ENGINE_BASE_URL + encodePath(clean));
+    }
+
+    function uniqueNonEmpty(values) {
+      const seen = new Set();
+      const result = [];
+      values.forEach((value) => {
+        const clean = String(value || "").trim();
+        if (!clean || seen.has(clean)) return;
+        seen.add(clean);
+        result.push(clean);
+      });
+      return result;
+    }
+
+    function sanitizeDescription(rawValue) {
+      let text = String(rawValue || "").trim();
+      if (!text) return "";
+
+      const inlineVerify = text.match(/\s+(verify|verified)\s*=\s*(on|off|true|false|1|0|yes|no|si)\s*$/i);
+      if (inlineVerify) {
+        text = text.slice(0, inlineVerify.index).trim();
+      }
+
+      const inlineType = text.match(/\s+type\s*=\s*[a-z0-9_-]+\s*$/i);
+      if (inlineType) {
+        text = text.slice(0, inlineType.index).trim();
+      }
+
+      return text;
+    }
+
+    function extractInlineVerifyValue(rawValue) {
+      const text = String(rawValue || "").trim();
+      if (!text) return null;
+      const inlineVerify = text.match(/\s+(verify|verified)\s*=\s*(on|off|true|false|1|0|yes|no|si)\s*$/i);
+      return inlineVerify ? inlineVerify[2] : null;
+    }
+
+    function getAppIconUrl(app) {
+      return resolveAssetUrl(app.iconName) || FALLBACK_APP_ICON;
+    }
+
+    function getScreenshotUrls(app) {
+      return uniqueNonEmpty([
+        resolveAssetUrl(app.screenshot1),
+        resolveAssetUrl(app.screenshot2),
+        resolveAssetUrl(app.screenshot3)
+      ]);
+    }
+
+    function setModalMainShot(src, alt) {
+      dom.modalMainShot.src = src || FALLBACK_SHOT;
+      dom.modalMainShot.alt = alt;
+      dom.modalMainShot.onerror = () => {
+        dom.modalMainShot.onerror = null;
+        dom.modalMainShot.src = FALLBACK_SHOT;
+      };
     }
 
     function starsToGlyph(rawStars) {
@@ -1464,6 +1606,9 @@
         const type = normalizeType(values.type || values.section || values.group || values.recommended);
         if (type) hasExplicitType = true;
 
+        const rawDescription = values.description || values.desc || values.descripcion || values.descripccion || "";
+        const inlineVerify = extractInlineVerifyValue(rawDescription);
+
         rows.push({
           app: {
             id: "",
@@ -1486,8 +1631,10 @@
               values.expansionfile ||
               values.mainobb ||
               "",
-            description: values.description || values.desc || values.descripcion || values.descripccion || "",
-            isVerified: parseVerifyFlag(values.verify || values.verified)
+            description: sanitizeDescription(rawDescription),
+            isVerified: parseVerifyFlag(
+              inlineVerify !== null ? inlineVerify : (values.verify || values.verified)
+            )
           },
           type
         });
@@ -2269,6 +2416,9 @@
       const img = document.createElement("img");
       img.src = src || fallbackSrc;
       img.alt = alt;
+      img.decoding = "async";
+      img.loading = "lazy";
+      img.draggable = false;
       if (className) img.className = className;
       if (fallbackSrc) {
         img.addEventListener("error", () => {
@@ -2536,15 +2686,29 @@
       state.currentModalApp = app;
       const install = buildInstallInfo(app.packageName);
       const appHasObb = hasObbData(app);
+      const iconSrc = getAppIconUrl(app);
+      const screenshots = getScreenshotUrls(app);
+      const title = safeText(app.name, "App details");
+      const developer = safeText(app.developer, "Unknown");
+      const category = categoryLabel(app.category);
+      const description = safeText(app.description, "No description.");
 
-      dom.modalTitle.textContent = safeText(app.name, "App details");
-      dom.modalDeveloper.textContent = "Developer: " + safeText(app.developer, "Unknown");
+      dom.modalTitle.textContent = title;
+      dom.modalAppName.textContent = title;
+      dom.modalAppSubtitle.textContent = developer + " | " + category + " | Android " + safeText(app.minAndroid, "?");
+      dom.modalAppIcon.onerror = () => {
+        dom.modalAppIcon.onerror = null;
+        dom.modalAppIcon.src = FALLBACK_APP_ICON;
+      };
+      dom.modalAppIcon.src = iconSrc;
+      dom.modalAppIcon.alt = title + " icon";
+      dom.modalDeveloper.textContent = "Developer: " + developer;
       dom.modalStars.textContent = "Rating: " + starsToGlyph(app.stars);
-      dom.modalCategory.textContent = "Category: " + categoryLabel(app.category);
+      dom.modalCategory.textContent = "Category: " + category;
       dom.modalAndroid.textContent = "Min Android: " + safeText(app.minAndroid, "?");
       dom.modalVersion.textContent = "Version: " + safeText(app.appVersion, "?");
       dom.modalVerified.textContent = "Verified: " + (app.isVerified ? "Yes" : "No");
-      dom.modalDescription.textContent = safeText(app.description, "No description.");
+      dom.modalDescription.textContent = sanitizeDescription(description);
 
       dom.modalInstallBtn.dataset.installMode = appHasObb ? "zip_obb" : "normal";
       if (appHasObb) {
@@ -2568,22 +2732,19 @@
         }
       }
 
-      const shots = [
-        resolveAssetUrl(app.screenshot1) || resolveAssetUrl(app.iconName) || FALLBACK_SHOT,
-        resolveAssetUrl(app.screenshot2) || resolveAssetUrl(app.iconName) || FALLBACK_SHOT,
-        resolveAssetUrl(app.screenshot3) || resolveAssetUrl(app.iconName) || FALLBACK_SHOT
-      ];
-
-      dom.modalMainShot.src = shots[0];
-      dom.modalMainShot.alt = "Screenshot of " + safeText(app.name, "app");
-      dom.modalMainShot.onerror = () => { dom.modalMainShot.src = FALLBACK_SHOT; };
+      setModalMainShot(
+        screenshots[0] || FALLBACK_SHOT,
+        screenshots.length ? "Screenshot of " + safeText(app.name, "app") : "Default artwork for " + title
+      );
+      dom.modalMediaHint.hidden = screenshots.length > 0;
 
       dom.modalThumbs.innerHTML = "";
-      shots.forEach((src, idx) => {
+      dom.modalThumbs.hidden = screenshots.length <= 1;
+      screenshots.forEach((src, idx) => {
         const thumb = makeImage(src, "Screenshot " + (idx + 1), "", FALLBACK_SHOT);
         if (idx === 0) thumb.classList.add("active");
         thumb.addEventListener("click", () => {
-          dom.modalMainShot.src = src;
+          setModalMainShot(src, "Screenshot of " + safeText(app.name, "app"));
           Array.from(dom.modalThumbs.children).forEach((el) => el.classList.remove("active"));
           thumb.classList.add("active");
         });
