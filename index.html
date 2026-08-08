@@ -2583,10 +2583,7 @@
       const main = buildMarketDownloadInfo("normal");
       dom.headerMainDownload.href = main.href;
       dom.headerMainDownload.textContent = "Download Market APK";
-      dom.headerMainDownload.title =
-        hasMarketVariant("normal") && hasMarketVariant("gingerbread")
-          ? "Clicking will let you choose: normal or gingerbread"
-          : main.label;
+      dom.headerMainDownload.title = main.label;
     }
 
     function renderAll() {
@@ -2661,10 +2658,7 @@
       if (dom.headerMainDownload) {
         dom.headerMainDownload.addEventListener("click", async (event) => {
           event.preventDefault();
-          const variant = await chooseMarketVariantForDownload();
-          if (!variant) return;
-
-          const selected = buildMarketDownloadInfo(variant);
+          const selected = buildMarketDownloadInfo("normal");
           if (!selected.href) return;
 
           if (selected.type === "mediafire") {
