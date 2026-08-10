@@ -21,6 +21,14 @@
       font-display: swap;
     }
 
+    @font-face {
+      font-family: "Storopia";
+      src: url("Storopia.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
     :root {
       --font-main: "Ataribaby Light", "Courier New", monospace;
       --bg: #ffffff;
@@ -58,7 +66,7 @@
 
     .page {
       width: min(var(--page-max), calc(100% - 32px));
-      margin: 18px auto 48px;
+      margin: 0 auto 48px;
     }
 
     .site-header {
@@ -68,6 +76,46 @@
       gap: 12px;
       flex-wrap: wrap;
       margin-bottom: 14px;
+      min-height: 65px;
+      padding: 0 6px;
+      border: 1px solid #111111;
+      background-color: #606060;
+      background-image: linear-gradient(to bottom, #9d9d9d 0%, #868686 54%, #828282 100%);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.55);
+    }
+
+    .android-market-brand {
+      display: inline-flex;
+      align-items: center;
+      flex: 0 0 270px;
+      min-height: 65px;
+      gap: 8px;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+
+    .android-market-brand-spacer {
+      width: 0;
+      height: 48px;
+      flex: 0 0 0;
+    }
+
+    .android-market-brand img {
+      width: 87px;
+      height: 65px;
+      flex: 0 0 87px;
+      object-fit: contain;
+      margin-left: -6px;
+    }
+
+    .android-market-brand-title {
+      overflow: hidden;
+      margin-left: -10px;
+      font-family: "Storopia", Arial, Helvetica, sans-serif;
+      font-size: 28px;
+      line-height: 0.95;
+      text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.75);
+      text-overflow: ellipsis;
     }
 
     .brand {
@@ -100,9 +148,9 @@
     .header-actions {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      min-width: min(680px, 100%);
+      gap: 6px;
+      flex-wrap: nowrap;
+      min-width: 0;
       flex: 1;
       justify-content: flex-end;
     }
@@ -112,38 +160,50 @@
       align-items: center;
       gap: 8px;
       min-height: 44px;
-      min-width: 300px;
-      padding: 0 12px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: rgba(12, 28, 21, 0.88);
-      flex: 1 1 320px;
+      min-width: 260px;
+      padding: 3px;
+      border: 1px solid #c8c8c8;
+      border-radius: 4px;
+      background: #e7e7e7;
+      flex: 1 1 300px;
     }
 
     .topbar-search input {
       width: auto;
       flex: 1;
       min-width: 0;
-      min-height: 42px;
-      border: none;
+      min-height: 36px;
+      border: 1px solid #b7b7b7;
+      border-radius: 4px;
       outline: none;
-      background: transparent;
-      color: var(--text);
+      background: #ffffff;
+      color: #3a3a3a;
       font-family: var(--font-main);
       font-size: 0.9rem;
+      padding: 0 7px;
     }
 
     .topbar-search-btn {
-      min-height: 34px;
-      padding: 0 10px;
-      border: 1px solid var(--line);
-      border-radius: 2px;
-      background: #f5f5f5;
+      width: 42px;
+      min-height: 36px;
+      padding: 0;
+      border: 1px solid #b9b9b9;
+      border-radius: 4px;
+      background: #f0f0f0;
       color: #111111;
       font-family: var(--font-main);
-      font-size: 0.8rem;
+      font-size: 0;
       cursor: pointer;
       white-space: nowrap;
+    }
+
+    .topbar-search-btn::before {
+      content: "⌕";
+      display: block;
+      color: #4d4d4d;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 29px;
+      line-height: 1;
     }
 
     .topbar-filter {
@@ -154,9 +214,9 @@
       padding: 0 10px;
       border: 1px solid var(--line);
       border-radius: 2px;
-      background: #ffffff;
+      background: #e7e7e7;
       color: #111111;
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       white-space: nowrap;
     }
 
@@ -896,6 +956,40 @@
       backdrop-filter: none !important;
     }
 
+    /* Android Market 2 topbar: keep the original retro chrome above the flat theme. */
+    .site-header {
+      background-color: #606060 !important;
+      background-image: linear-gradient(to bottom, #9d9d9d 0%, #868686 54%, #828282 100%) !important;
+      border-color: #111111 !important;
+    }
+
+    .site-header .topbar-search {
+      background: #e7e7e7 !important;
+      border-color: #c8c8c8 !important;
+    }
+
+    .site-header .android-market-brand-title {
+      color: #ffffff !important;
+    }
+
+    .site-header {
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+      padding-left: 18px;
+      padding-right: 18px;
+      border: 0 !important;
+      border-radius: 0;
+      box-shadow: none !important;
+    }
+
+    .site-header,
+    .site-header input,
+    .site-header button,
+    .site-header select {
+      font-family: "Storopia", Arial, Helvetica, sans-serif;
+    }
+
     .action-btn,
     .action-btn.primary,
     .download-btn,
@@ -1033,7 +1127,7 @@
     @media (max-width: 680px) {
       .page {
         width: min(var(--page-max), calc(100% - 20px));
-        margin-top: 12px;
+        margin-top: 0;
       }
 
       .hero { padding: 18px; }
@@ -1041,6 +1135,7 @@
       .controls { grid-template-columns: 1fr; }
 
       .header-actions { width: 100%; justify-content: stretch; }
+      .android-market-brand { flex-basis: 100%; }
       .topbar-search { min-width: 100%; flex-basis: 100%; }
       .topbar-filter { flex: 1 1 calc(50% - 8px); }
       .header-actions .action-btn { flex: 1; }
@@ -1048,46 +1143,1245 @@
       .modal-app-icon { width: 72px; height: 72px; }
       .modal-main-shot { min-height: 220px; }
       .modal-meta-list { grid-template-columns: 1fr; }
+
+      .site-header {
+        gap: 8px;
+        padding: 8px 10px;
+      }
+
+      .android-market-brand {
+        justify-content: center;
+        min-height: 58px;
+      }
+
+      .android-market-brand-title {
+        max-width: calc(100vw - 130px);
+        font-size: 24px;
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 8px;
+        align-items: stretch;
+        flex-wrap: wrap;
+      }
+
+      .topbar-search {
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        flex: 1 1 100%;
+      }
+
+      .topbar-search input {
+        min-width: 0;
+        font-size: 0.82rem;
+      }
+
+      .topbar-filter {
+        min-width: 0;
+        min-height: 42px;
+        flex: 1 1 calc(50% - 4px);
+        justify-content: space-between;
+        padding: 0 8px;
+      }
+
+      .topbar-filter select {
+        min-width: 0;
+        max-width: 62%;
+      }
+
+      .header-actions .action-btn {
+        min-width: 0;
+        flex: 1 1 calc(50% - 4px);
+        padding: 0 8px;
+        font-size: 0.78rem;
+      }
+
+      .header-actions a#headerMainDownload.action-btn.primary {
+        min-width: 0;
+        flex: 1 1 100%;
+        width: 100%;
+        min-height: 44px;
+        font-size: 0.86rem;
+      }
+    }
+
+    @media (min-width: 681px) and (max-width: 1180px) {
+      .site-header {
+        align-items: flex-start;
+      }
+
+      .android-market-brand {
+        flex-basis: 240px;
+      }
+
+      .android-market-brand-title {
+        font-size: 24px;
+      }
+
+      .header-actions {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .topbar-search {
+        min-width: 260px;
+      }
     }
 
     a#headerMainDownload.action-btn.primary {
       color: #052308 !important;
       background: linear-gradient(135deg, #b2f263, #88d64f 55%, #5fc533 100%) !important;
       border-color: rgba(184, 239, 136, 0.62) !important;
+      min-width: 210px;
+      white-space: nowrap;
+    }
+
+    .site-header .action-btn:not(.primary) {
+      color: #111111;
+      background: #e7e7e7;
+      border-color: #bdbdbd;
+      border-radius: 10px;
+      box-shadow: none;
+    }
+
+    .site-header .topbar-search,
+    .site-header .topbar-search input,
+    .site-header .topbar-search-btn,
+    .site-header .topbar-filter,
+    .site-header .topbar-filter select,
+    .site-header .action-btn {
+      border-radius: 10px;
+    }
+
+    /* Market 2 application layout */
+    body {
+      background: #e8e8e8;
+    }
+
+    .page {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+    }
+
+    .site-header {
+      margin-bottom: 0;
+    }
+
+    .market-nav {
+      display: flex;
+      width: 100%;
+      min-height: 43px;
+      background: #dedede;
+      border-bottom: 1px solid #a8a8a8;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.24);
+    }
+
+    .market-nav-button {
+      min-width: 128px;
+      min-height: 43px;
+      padding: 0 18px;
+      border: 0;
+      border-right: 1px solid #b4b4b4;
+      border-radius: 0;
+      background: linear-gradient(#f8f8f8, #d2d2d2);
+      color: #5d5d5d;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-shadow: 0 1px #ffffff;
+    }
+
+    .market-nav-button:hover,
+    .market-nav-button.active {
+      background: linear-gradient(#d2d2d2, #b9b9b9);
+      color: #333333;
+    }
+
+    .hero,
+    #versions,
+    .footer {
+      display: none !important;
+    }
+
+    .panel {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      border: 0 !important;
+      border-radius: 0;
+      background: #ffffff !important;
+      box-shadow: none !important;
+    }
+
+    .panel-title {
+      min-height: 25px;
+      margin: 0;
+      padding: 4px 8px;
+      background: linear-gradient(#8b8b8b, #686868);
+      color: #ffffff;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1.2;
+      text-shadow: 0 1px 1px #333333;
+    }
+
+    .panel-subtitle {
+      display: none;
+    }
+
+    .cards {
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .app-card {
+      display: grid;
+      grid-template-columns: 58px minmax(0, 1fr) auto;
+      grid-template-rows: auto auto;
+      grid-template-areas:
+        "cover cover actions"
+        "meta meta actions";
+      min-height: 76px;
+      margin: 0;
+      padding: 7px 10px 8px 7px;
+      border: 0 !important;
+      border-bottom: 1px solid #dddddd !important;
+      border-radius: 0;
+      background: #ffffff !important;
+      box-shadow: none !important;
+    }
+
+    .app-cover {
+      grid-area: cover;
+      display: flex;
+      align-items: flex-start;
+      min-width: 0;
+      min-height: 0;
+      gap: 9px;
+      padding: 0;
+      background: transparent !important;
+    }
+
+    .app-icon {
+      width: 48px;
+      height: 48px;
+      flex: 0 0 48px;
+      border-radius: 0;
+      object-fit: contain;
+    }
+
+    .app-cover > div {
+      min-width: 0;
+      padding-top: 1px;
+    }
+
+    .app-name {
+      overflow: hidden;
+      margin: 0;
+      color: #222222;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.98rem;
+      font-weight: 700;
+      line-height: 1.2;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .app-dev,
+    .app-rating {
+      overflow: hidden;
+      margin: 1px 0 0;
+      color: #777777;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.75rem;
+      line-height: 1.2;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .app-rating {
+      display: none;
+    }
+
+    .app-meta {
+      grid-area: meta;
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 7px;
+      margin: 0;
+      padding: 0 0 0 67px;
+    }
+
+    .mini-chip {
+      overflow: hidden;
+      max-width: 180px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #777777;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.72rem;
+      line-height: 1.2;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mini-chip + .mini-chip::before {
+      content: " · ";
+      color: #aaaaaa;
+    }
+
+    .mini-chip.verified {
+      color: #4f8e34;
+      font-weight: 700;
+    }
+
+    .mini-chip.verified img {
+      width: 13px;
+      height: 13px;
+      margin-right: 3px;
+      vertical-align: -2px;
+      object-fit: contain;
+    }
+
+    .app-desc {
+      display: none;
+    }
+
+    .app-actions {
+      grid-area: actions;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      min-width: 86px;
+      gap: 5px;
+      margin: 0 0 0 8px;
+      padding: 0;
+    }
+
+    .app-actions button,
+    .app-actions .install {
+      min-height: 28px;
+      padding: 4px 8px;
+      border: 1px solid #b5b5b5;
+      border-radius: 3px;
+      background: linear-gradient(#ffffff, #dddddd);
+      color: #4f4f4f;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      line-height: 1.1;
+      text-align: center;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .app-actions .install {
+      background: linear-gradient(#9ecb62, #6e9e34);
+      border-color: #5a832e;
+      color: #ffffff;
+      text-shadow: 0 1px #4b6d28;
+    }
+
+    .empty-box {
+      min-height: 90px;
+      margin: 0;
+      border: 0;
+      border-bottom: 1px solid #dddddd;
+      border-radius: 0;
+      background: #ffffff;
+      color: #777777;
+      text-align: center;
+    }
+
+    .market-downloads {
+      min-height: 240px;
+    }
+
+    .downloads-list {
+      background: #ffffff;
+    }
+
+    .download-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 12px;
+      min-height: 58px;
+      padding: 7px 12px;
+      border-bottom: 1px solid #dddddd;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .download-row strong,
+    .download-row span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .download-row strong { font-size: 0.86rem; }
+    .download-row span { color: #777777; font-size: 0.72rem; }
+    .download-row-link {
+      padding: 5px 10px;
+      border: 1px solid #b5b5b5;
+      border-radius: 3px;
+      color: #555555;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    @media (max-width: 680px) {
+      .market-nav-button {
+        min-width: 0;
+        flex: 1;
+        padding: 0 6px;
+        font-size: 0.72rem;
+      }
+
+      .app-card {
+        grid-template-columns: 55px minmax(0, 1fr);
+        grid-template-areas:
+          "cover cover"
+          "meta meta"
+          "actions actions";
+        padding-right: 7px;
+      }
+
+      .app-meta {
+        padding-left: 62px;
+      }
+
+      .app-actions {
+        justify-content: flex-end;
+        min-width: 0;
+        margin: 4px 0 0;
+      }
+
+      .app-actions button,
+      .app-actions .install {
+        flex: 0 1 auto;
+      }
+
+      .download-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 7px;
+      }
+
+      .download-row span {
+        grid-column: 1;
+        grid-row: 2;
+      }
+
+      .download-row-link {
+        grid-column: 2;
+        grid-row: 1 / 3;
+      }
+    }
+
+    /* Exact Market 2 title bar: only the bag, screen title and search action. */
+    .modal-layer {
+      z-index: 50;
+      padding: 0;
+      background: rgba(232, 232, 232, 0.98) !important;
+    }
+
+    .modal-card {
+      width: 100%;
+      max-width: none;
+      height: 100%;
+      max-height: none;
+      overflow: auto;
+      border: 0 !important;
+      border-radius: 0;
+      background: #ffffff !important;
+      box-shadow: none !important;
+    }
+
+    .modal-top {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      min-height: 65px;
+      margin: 0;
+      padding: 0 10px;
+      border: 0;
+      background: linear-gradient(to bottom, #9d9d9d 0%, #868686 54%, #828282 100%);
+    }
+
+    .modal-title {
+      color: #ffffff !important;
+      font-family: "Storopia", Arial, Helvetica, sans-serif;
+      font-size: 28px;
+      text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.75);
+    }
+
+    .modal-close {
+      width: 42px;
+      height: 42px;
+      border: 1px solid #999999;
+      border-radius: 0;
+      background: linear-gradient(#ffffff, #d9d9d9);
+      color: #444444;
+      font-size: 1rem;
+    }
+
+    .modal-body {
+      display: block;
+      padding: 0;
+    }
+
+    .modal-media,
+    .modal-info {
+      padding: 12px;
+      border: 0 !important;
+      border-radius: 0;
+      background: #ffffff !important;
+      box-shadow: none !important;
+    }
+
+    .modal-media-label {
+      min-height: 26px;
+      margin: -12px -12px 10px;
+      padding: 5px 8px;
+      background: linear-gradient(#777777, #5e5e5e);
+      color: #ffffff;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    .modal-app-head {
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #dddddd;
+    }
+
+    .modal-app-icon {
+      width: 64px;
+      height: 64px;
+      padding: 4px;
+      border: 1px solid #cccccc;
+      border-radius: 0;
+    }
+
+    .modal-app-name,
+    .modal-app-subtitle,
+    .modal-meta-list p,
+    .modal-desc {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .modal-main-shot {
+      min-height: 220px;
+      border: 1px solid #cccccc;
+      border-radius: 0;
+      background: #f5f5f5;
+    }
+
+    .modal-thumbs {
+      display: flex;
+      overflow-x: auto;
+      gap: 4px;
+    }
+
+    .modal-thumbs img {
+      width: 146px;
+      min-width: 146px;
+      min-height: 100px;
+      border: 1px solid #bdbdbd;
+      border-radius: 0;
+      padding: 2px;
+    }
+
+    .modal-meta-list p {
+      padding: 7px 9px;
+      border: 0;
+      border-bottom: 1px solid #dddddd;
+      border-radius: 0;
+      background: #ffffff;
+    }
+
+    .modal-desc {
+      padding: 12px 0 0;
+      border-top: 1px solid #dddddd;
+      color: #333333;
+      line-height: 1.45;
+    }
+
+    .modal-actions a,
+    .modal-actions button {
+      min-height: 38px;
+      border: 1px solid #999999;
+      border-radius: 3px;
+      background: linear-gradient(#ffffff, #d4d4d4);
+      color: #444444;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .essentials-controls {
+      padding: 8px 10px;
+      background: linear-gradient(#777777, #5e5e5e);
+      color: #ffffff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .essentials-controls[hidden] {
+      display: none;
+    }
+
+    .essentials-selected {
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-shadow: 0 1px #333333;
+    }
+
+    .essentials-controls input[type="range"] {
+      display: block;
+      width: 100%;
+      margin: 6px 0 0;
+      accent-color: #5c5c5c;
+    }
+
+    .essentials-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .essentials-actions button {
+      min-width: 76px;
+      min-height: 30px;
+      border: 1px solid #999999;
+      border-radius: 3px;
+      background: linear-gradient(#ffffff, #d4d4d4);
+      color: #444444;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 700;
+    }
+
+    .essentials-actions span {
+      font-size: 0.72rem;
+    }
+
+    .site-header {
+      justify-content: space-between;
+      min-height: 65px;
+      padding: 0 10px;
+      background-color: #8b8b8b !important;
+      background-image: linear-gradient(to bottom, #9d9d9d 0%, #868686 54%, #828282 100%) !important;
+    }
+
+    .site-header .android-market-brand {
+      flex: 0 1 auto;
+      min-height: 65px;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .site-header .header-actions {
+      flex: 0 0 auto;
+      min-width: 0;
+    }
+
+    .site-header .topbar-search {
+      width: 48px;
+      min-width: 48px;
+      min-height: 56px;
+      padding: 4px 0;
+      border: 0 !important;
+      border-radius: 0;
+      background: transparent !important;
+    }
+
+    .site-header .topbar-search-btn {
+      width: 48px;
+      height: 48px;
+      min-height: 48px;
+      border-radius: 0;
+      border-color: #a9a9a9;
+      background: linear-gradient(#ffffff, #d9d9d9);
+    }
+
+    .market-search-panel {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      width: 100%;
+      padding: 8px 10px;
+      background: #e7e7e7;
+      border-bottom: 1px solid #bdbdbd;
+    }
+
+    .market-search-panel[hidden] {
+      display: none;
+    }
+
+    .market-search-panel input {
+      width: 100%;
+      min-height: 40px;
+      padding: 0 10px;
+      border: 1px solid #b7b7b7;
+      border-radius: 3px;
+      background: #ffffff;
+      color: #333333;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.9rem;
+    }
+
+    .market-search-panel button {
+      min-height: 40px;
+      padding: 0 16px;
+      border: 1px solid #999999;
+      border-radius: 3px;
+      background: linear-gradient(#ffffff, #d4d4d4);
+      color: #444444;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 700;
+    }
+
+    .market-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      min-height: 43px;
+      padding: 5px 10px;
+      background: #eeeeee;
+      border-bottom: 1px solid #c5c5c5;
+    }
+
+    .market-controls .topbar-filter {
+      min-height: 32px;
+      padding: 0 7px;
+      border-radius: 3px;
+      background: #dddddd;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.72rem;
+    }
+
+    .market-controls .topbar-filter select {
+      min-height: 27px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.72rem;
+    }
+
+    .market-controls .action-btn {
+      min-height: 32px;
+      padding: 0 10px;
+      border-radius: 3px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.72rem;
+    }
+
+    .market-controls a#headerMainDownload.action-btn.primary {
+      min-width: 0;
+    }
+
+    @media (max-width: 680px) {
+      .site-header {
+        padding: 0 6px;
+      }
+
+      .site-header .android-market-brand-title {
+        font-size: 24px;
+      }
+
+      .market-controls {
+        justify-content: stretch;
+      }
+
+      .market-controls .topbar-filter,
+      .market-controls .action-btn {
+        flex: 1 1 calc(50% - 4px);
+        min-width: 0;
+      }
+
+      .market-controls a#headerMainDownload.action-btn.primary {
+        flex-basis: 100%;
+      }
+    }
+
+    /* Android Market 2 promotion switcher: 90x60 artwork, 600ms fade, 7s cycle. */
+    .promo-carousel {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      min-height: 89px;
+      padding: 7px 10px;
+      border: 0;
+      border-bottom: 1px solid #477b24;
+      border-radius: 0;
+      background: #89d84b url("market2-assets/bg_promotion_app.png") repeat-x center;
+      color: #ffffff;
+      font-family: Arial, Helvetica, sans-serif;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .promo-carousel[hidden] {
+      display: none;
+    }
+
+    .promo-carousel-frame {
+      display: grid;
+      place-items: center;
+      width: 102px;
+      height: 72px;
+      flex: 0 0 102px;
+      padding: 6px;
+      background: url("market2-assets/promo_frame_normal.9.png") center / 100% 100% no-repeat;
+    }
+
+    .promo-carousel-image {
+      display: block;
+      width: 90px;
+      height: 60px;
+      object-fit: cover;
+      background: #ffffff;
+    }
+
+    .promo-carousel-copy {
+      display: flex;
+      min-width: 0;
+      max-width: 520px;
+      flex-direction: column;
+      gap: 3px;
+      margin-left: 12px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65);
+    }
+
+    .promo-carousel-copy strong {
+      overflow: hidden;
+      font-size: 0.95rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .promo-carousel-copy span {
+      display: -webkit-box;
+      overflow: hidden;
+      font-size: 0.78rem;
+      line-height: 1.25;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+
+    .promo-carousel.is-changing .promo-carousel-frame,
+    .promo-carousel.is-changing .promo-carousel-copy {
+      animation: market-promo-fade 600ms ease both;
+    }
+
+    @keyframes market-promo-fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Compact asset_info layout: the Android app shows thumbnail strips, not a huge hero image. */
+    .modal-card {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-top {
+      flex: 0 0 65px;
+      min-height: 65px;
+      padding: 4px 10px;
+    }
+
+    .modal-top-app {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-top .modal-app-icon {
+      width: 48px;
+      height: 48px;
+      flex: 0 0 48px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+
+    .modal-top-copy {
+      min-width: 0;
+    }
+
+    .modal-top .modal-title {
+      overflow: hidden;
+      max-width: min(70vw, 720px);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 1rem;
+      line-height: 1.1;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .modal-top .modal-app-subtitle {
+      overflow: hidden;
+      max-width: min(70vw, 720px);
+      margin: 2px 0 0;
+      color: #ffffff;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.7rem;
+      line-height: 1.15;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .modal-body {
+      display: flex;
+      width: min(980px, 100%);
+      max-width: 980px;
+      flex: 1 0 auto;
+      flex-direction: column;
+      gap: 0;
+      margin: 0 auto;
+      padding: 0 12px 12px;
+    }
+
+    .modal-info {
+      order: 1;
+      width: 100%;
+      padding: 12px 0 8px;
+    }
+
+    .modal-media {
+      order: 2;
+      width: 100%;
+      padding: 0 0 12px;
+    }
+
+    .modal-main-shot {
+      display: none;
+    }
+
+    .modal-meta-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 4px 8px;
+    }
+
+    .modal-meta-list p {
+      overflow: hidden;
+      padding: 4px 6px;
+      font-size: 0.72rem;
+      line-height: 1.2;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .modal-desc {
+      margin-top: 9px;
+      padding-top: 9px;
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+
+    .modal-media-label {
+      margin: 0 0 8px;
+      padding: 5px 8px;
+      background: linear-gradient(#777777, #5e5e5e);
+      color: #ffffff;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .modal-thumbs {
+      display: flex;
+      overflow-x: auto;
+      gap: 4px;
+      margin: 0;
+      padding: 0 0 3px;
+      scrollbar-width: thin;
+    }
+
+    .modal-thumbs img {
+      width: 146px;
+      min-width: 146px;
+      height: 217px;
+      min-height: 217px;
+      padding: 4px;
+      border: 1px solid #999999;
+      border-radius: 0;
+      background: #f4f4f4 url("market2-assets/screenshot_frame_normal.9.png") center / 100% 100% no-repeat;
+      object-fit: contain;
+    }
+
+    .modal-thumbs img.active {
+      border-color: #4f8f22;
+      box-shadow: 0 0 0 2px rgba(79, 143, 34, 0.35);
+    }
+
+    .modal-actions {
+      position: sticky;
+      bottom: 0;
+      z-index: 3;
+      flex: 0 0 52px;
+      min-height: 52px;
+      width: 100%;
+      margin: 0;
+      padding: 4px 6px;
+      background: #777777 url("market2-assets/bottombar_portrait_565.png") center / auto 54px repeat-x;
+      border-top: 1px solid #575757;
+    }
+
+    .modal-actions a,
+    .modal-actions button {
+      min-width: 120px;
+      min-height: 38px;
+      border-radius: 3px;
+      font-size: 0.76rem;
+    }
+
+    /* FullImageGalleryActivity equivalent, opened by tapping a thumbnail. */
+    .full-image-gallery {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #000000;
+    }
+
+    .full-image-gallery.hidden {
+      display: none;
+    }
+
+    .full-image-gallery-image-layout {
+      display: grid;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    #fullGalleryImage {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      opacity: 1;
+    }
+
+    #fullGalleryImage.is-changing {
+      animation: market-gallery-fade 600ms ease both;
+    }
+
+    @keyframes market-gallery-fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .full-gallery-arrow {
+      position: absolute;
+      top: 50%;
+      width: 60px;
+      height: 85px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+
+    .full-gallery-arrow img {
+      display: block;
+      width: 60px;
+      height: 85px;
+    }
+
+    .full-gallery-prev { left: 0; }
+    .full-gallery-next { right: 0; }
+
+    .full-gallery-controls {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      min-height: 52px;
+      padding: 4px 2px;
+      background: #777777 url("market2-assets/bottombar_portrait_565.png") center / auto 54px repeat-x;
+      transition: opacity 160ms ease;
+    }
+
+    .full-gallery-controls.controls-hidden,
+    .full-gallery-arrow.controls-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .full-gallery-controls button {
+      min-width: 150px;
+      min-height: 38px;
+      border: 1px solid #999999;
+      border-radius: 3px;
+      background: linear-gradient(#ffffff, #d4d4d4);
+      color: #444444;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 700;
+    }
+
+    @media (max-width: 680px) {
+      .promo-carousel-copy {
+        max-width: calc(100vw - 140px);
+      }
+
+      .modal-body {
+        padding-right: 8px;
+        padding-left: 8px;
+      }
+
+      .modal-meta-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .modal-actions a,
+      .modal-actions button {
+        min-width: 0;
+      }
+
+      .full-gallery-arrow {
+        width: 48px;
+        height: 68px;
+      }
+
+      .full-gallery-arrow img {
+        width: 48px;
+        height: 68px;
+      }
+    }
+
+    /* The original changing banners are ad.png, ad2.png and ad3.png, not app screenshots. */
+    .promo-carousel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 0;
+      padding: 0;
+      border: 0;
+      border-bottom: 1px solid #c5c5c5;
+      border-radius: 0;
+      background: #89d84b url("market2-assets/bg_promotion_app.png") center / auto 100% repeat-x;
+      cursor: default;
+    }
+
+    .promo-carousel[hidden] {
+      display: none;
+    }
+
+    .promo-carousel-frame {
+      display: block;
+      width: min(480px, 100%);
+      height: auto;
+      flex: 0 1 480px;
+      padding: 0;
+      background: transparent;
+    }
+
+    .promo-carousel-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 480 / 200;
+      object-fit: contain;
+      background: #ffffff;
+    }
+
+    .promo-carousel-copy {
+      display: none;
+    }
+
+    .promo-carousel.is-changing .promo-carousel-image {
+      animation: market-ad-fade 600ms ease both;
+    }
+
+    @keyframes market-ad-fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Search stays available, as in the original Market toolbar. */
+    .market-search-panel,
+    .market-search-panel[hidden] {
+      display: flex !important;
     }
   </style>
 </head>
 <body>
   <div class="page" id="home">
     <header class="site-header">
+      <a class="android-market-brand" id="marketHomeLink" href="#home" aria-label="Go to Android Market 2 home">
+        <span class="android-market-brand-spacer" aria-hidden="true"></span>
+        <img src="market2-assets/ic_market_bag_normal.png" alt="" aria-hidden="true" />
+        <span class="android-market-brand-title">market 2</span>
+      </a>
       <div class="header-actions">
         <div class="topbar-search">
-          <span>🔎</span>
-          <input id="topbarSearchInput" type="search" placeholder="Search app or developer..." />
-          <button id="topbarSearchBtn" class="topbar-search-btn" type="button">Search</button>
+          <button id="topbarSearchBtn" class="topbar-search-btn" type="button" aria-label="Search">Search</button>
         </div>
-        <label class="topbar-filter" for="categoryFilter">
-          Category
-          <select id="categoryFilter">
-            <option value="all">All</option>
-            <option value="apps">Apps</option>
-            <option value="games">Games</option>
-            <option value="books">Books</option>
-            <option value="movies">Movies</option>
-          </select>
-        </label>
-        <label class="topbar-filter" for="sortFilter">
-          Sort
-          <select id="sortFilter">
-            <option value="alpha">A-Z</option>
-            <option value="stars">Top rated</option>
-            <option value="android">Min Android</option>
-          </select>
-        </label>
-        <a class="action-btn" href="#catalog">Catalog</a>
-        <a class="action-btn primary" id="headerMainDownload" href="#" target="_blank" rel="noopener">Download Market APK</a>
       </div>
     </header>
+
+    <section class="market-search-panel" id="marketSearchPanel">
+      <input id="topbarSearchInput" type="search" placeholder="Search Android Market" />
+      <button id="marketSearchApply" type="button">Search</button>
+    </section>
+
+    <nav class="market-nav" id="marketNav" aria-label="Market navigation">
+      <button class="market-nav-button active" type="button" data-market-view="featured">Android Essentials</button>
+      <button class="market-nav-button" type="button" data-market-category="apps">Apps</button>
+      <button class="market-nav-button" type="button" data-market-category="games">Games</button>
+      <button class="market-nav-button" type="button" data-market-view="downloads">Downloads</button>
+    </nav>
+
+    <section class="market-controls" aria-label="Market controls">
+      <label class="topbar-filter" for="categoryFilter">
+        Category
+        <select id="categoryFilter">
+          <option value="all">All</option>
+          <option value="apps">Apps</option>
+          <option value="games">Games</option>
+          <option value="books">Books</option>
+          <option value="movies">Movies</option>
+        </select>
+      </label>
+      <label class="topbar-filter" for="sortFilter">
+        Sort
+        <select id="sortFilter">
+          <option value="alpha">A-Z</option>
+          <option value="stars">Top rated</option>
+          <option value="android">Min Android</option>
+        </select>
+      </label>
+      <a class="action-btn" href="#catalog">Catalog</a>
+      <a class="action-btn primary" id="headerMainDownload" href="#" target="_blank" rel="noopener">Download Market APK</a>
+    </section>
 
     <section class="hero">
       <div class="hero-content">
@@ -1105,16 +2399,44 @@
       </div>
     </section>
 
-    <section class="panel">
-      <h3 class="panel-title">Featured</h3>
+    <section class="panel" id="recommendedSection">
+      <h3 class="panel-title">Android Essentials</h3>
       <p class="panel-subtitle">Top recommendations from the feed, just like the Android app.</p>
+      <div class="essentials-controls" id="essentialsControls">
+        <div class="essentials-selected" id="essentialsSelectedVersion">Android 4.1 Jelly Bean</div>
+        <input id="essentialsVersionRange" type="range" min="0" max="30" value="12" step="1" aria-label="Android version" />
+        <div class="essentials-actions">
+          <button id="essentialsApplyButton" type="button">Apply</button>
+          <span id="essentialsResultsSummary">Choose a version and apply the compatibility filter.</span>
+        </div>
+      </div>
+      <div class="promo-carousel" id="promoCarousel" role="region" aria-label="Market promotions" hidden>
+        <span class="promo-carousel-frame">
+          <img id="promoCarouselImage" class="promo-carousel-image" src="market2-assets/ad.png" alt="Market promotion" />
+        </span>
+        <span class="promo-carousel-copy" aria-hidden="true">
+          <strong id="promoCarouselTitle"></strong>
+          <span id="promoCarouselDescription"></span>
+        </span>
+      </div>
       <div id="recommendedGrid" class="cards"></div>
+    </section>
+
+    <section class="panel more-apps-section" id="moreAppsSection" hidden>
+      <h3 class="panel-title">More apps</h3>
+      <div id="moreAppsGrid" class="cards"></div>
     </section>
 
     <section class="panel" id="catalog" hidden>
       <h3 class="panel-title">Full catalog</h3>
       <p class="panel-subtitle">Click "Install" to open the APK download or store.</p>
       <div id="catalogGrid" class="cards"></div>
+    </section>
+
+    <section class="panel market-downloads" id="downloadsPanel" hidden>
+      <h3 class="panel-title">Downloads</h3>
+      <p class="panel-subtitle">Downloaded files and recent download actions.</p>
+      <div id="downloadsList" class="downloads-list"></div>
     </section>
 
     <section class="panel" id="versions">
@@ -1132,24 +2454,18 @@
   <div id="appModal" class="modal-layer hidden" aria-hidden="true">
     <article class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <div class="modal-top">
-        <h3 class="modal-title" id="modalTitle">App details</h3>
+        <div class="modal-top-app">
+          <img id="modalAppIcon" class="modal-app-icon" src="android-logo-white.jpg" alt="App icon" />
+          <div class="modal-top-copy">
+            <h3 class="modal-title" id="modalTitle">App details</h3>
+            <p class="modal-app-subtitle" id="modalAppSubtitle">Unknown developer</p>
+            <span id="modalAppName" hidden>App name</span>
+          </div>
+        </div>
         <button class="modal-close" id="modalCloseBtn" type="button" aria-label="Close">✕</button>
       </div>
       <div class="modal-body">
-        <section class="modal-media">
-          <p class="modal-media-label">Screenshots</p>
-          <img id="modalMainShot" class="modal-main-shot" src="market 2.png" alt="Main screenshot" />
-          <p id="modalMediaHint" class="modal-media-hint" hidden>No screenshots available for this app.</p>
-          <div id="modalThumbs" class="modal-thumbs"></div>
-        </section>
         <section class="modal-info">
-          <div class="modal-app-head">
-            <img id="modalAppIcon" class="modal-app-icon" src="android-logo-white.jpg" alt="App icon" />
-            <div class="modal-app-summary">
-              <h4 class="modal-app-name" id="modalAppName">App name</h4>
-              <p class="modal-app-subtitle" id="modalAppSubtitle">Unknown developer</p>
-            </div>
-          </div>
           <div class="modal-meta-list">
             <p id="modalDeveloper">Developer: --</p>
             <p id="modalStars">Rating: --</p>
@@ -1159,13 +2475,34 @@
             <p id="modalVerified">Verified: --</p>
           </div>
           <p class="modal-desc" id="modalDescription">No description available.</p>
-          <div class="modal-actions">
-            <a id="modalInstallBtn" class="primary" href="#" target="_blank" rel="noopener">Install</a>
-            <button id="modalCopyBtn" type="button">Copy link</button>
-          </div>
+        </section>
+        <section class="modal-media">
+          <p class="modal-media-label">Screenshots</p>
+          <img id="modalMainShot" class="modal-main-shot" src="market 2.png" alt="Main screenshot" />
+          <p id="modalMediaHint" class="modal-media-hint" hidden>No screenshots available for this app.</p>
+          <div id="modalThumbs" class="modal-thumbs"></div>
         </section>
       </div>
+      <div class="modal-actions">
+        <a id="modalInstallBtn" class="primary" href="#" target="_blank" rel="noopener">Install</a>
+        <button id="modalCopyBtn" type="button">Copy link</button>
+      </div>
     </article>
+  </div>
+
+  <div id="fullImageGallery" class="full-image-gallery hidden" aria-hidden="true">
+    <div class="full-image-gallery-image-layout">
+      <img id="fullGalleryImage" src="market 2.png" alt="Full screenshot" />
+    </div>
+    <button id="fullGalleryPrev" class="full-gallery-arrow full-gallery-prev" type="button" aria-label="Previous screenshot">
+      <img src="market2-assets/btn_gallery_arrow_left_default.png" alt="" aria-hidden="true" />
+    </button>
+    <button id="fullGalleryNext" class="full-gallery-arrow full-gallery-next" type="button" aria-label="Next screenshot">
+      <img src="market2-assets/btn_gallery_arrow_right_default.png" alt="" aria-hidden="true" />
+    </button>
+    <div id="fullGalleryControls" class="full-gallery-controls">
+      <button id="fullGalleryClose" type="button">Done</button>
+    </div>
   </div>
 
   <div id="marketVariantModal" class="modal-layer hidden" aria-hidden="true">
@@ -1200,6 +2537,11 @@
       "https://api.github.com/repos/rdr-retro/Android-Market-2-Engine/contents/apps.txt?ref=main";
     const ENGINE_BASE_URL =
       "https://raw.githubusercontent.com/rdr-retro/Android-Market-2-Engine/main/";
+    const MARKET_AD_IMAGES = [
+      "market2-assets/ad.png",
+      "market2-assets/ad2.png",
+      "market2-assets/ad3.png"
+    ];
 
     const ANDROID_LOGOS = [
       { file: "android text logo.png", label: "All versions", filterVersion: "" },
@@ -1224,6 +2566,17 @@
       { file: "Android_14_official_logo.png", label: "Android 14", filterVersion: "14" },
       { file: "Android_15_Developer_Preview_logo.png", label: "Android 15 DP", filterVersion: "15" },
       { file: "Android_16_Developer_Preview_Logo.png", label: "Android 16 DP", filterVersion: "16" }
+    ];
+
+    const ANDROID_ESSENTIALS_VERSIONS = [
+      ["1.0", 1], ["1.1 Petit Four", 2], ["1.5 Cupcake", 3], ["1.6 Donut", 4],
+      ["2.0 Eclair", 5], ["2.1 Eclair", 7], ["2.2 Froyo", 8], ["2.3 Gingerbread", 9],
+      ["3.0 Honeycomb", 11], ["3.1 Honeycomb", 12], ["3.2 Honeycomb", 13],
+      ["4.0 Ice Cream Sandwich", 14], ["4.1 Jelly Bean", 16], ["4.2 Jelly Bean", 17],
+      ["4.3 Jelly Bean", 18], ["4.4 KitKat", 19], ["5.0 Lollipop", 21], ["5.1 Lollipop", 22],
+      ["6.0 Marshmallow", 23], ["7.0 Nougat", 24], ["7.1 Nougat", 25], ["8.0 Oreo", 26],
+      ["8.1 Oreo", 27], ["9.0 Pie", 28], ["10", 29], ["11", 30], ["12", 31],
+      ["12.1", 32], ["13", 33], ["14", 34], ["15", 35]
     ];
 
     const FALLBACK_APP_ICON = "android-logo-white.jpg";
@@ -1262,19 +2615,51 @@
       showAllCatalog: false,
       selectedAndroidVersionToken: "",
       selectedAndroidVersionLabel: "",
-      currentModalApp: null
+      searchIndex: new Map(),
+      marketView: "featured",
+      downloads: [],
+      essentialsAppliedApi: 0,
+      essentialsVersionIndex: 12,
+      currentModalApp: null,
+      promoApps: [],
+      promoIndex: 0,
+      promoTimer: null,
+      promoAnimationTimer: null,
+      promoImageCache: new Map(),
+      promoRenderToken: 0,
+      galleryScreenshots: [],
+      galleryIndex: 0,
+      galleryControlsTimer: null
     };
 
     const dom = {
+      marketHomeLink: document.getElementById("marketHomeLink"),
       topbarSearchInput: document.getElementById("topbarSearchInput"),
       topbarSearchBtn: document.getElementById("topbarSearchBtn"),
+      marketSearchPanel: document.getElementById("marketSearchPanel"),
+      marketSearchApply: document.getElementById("marketSearchApply"),
       categoryFilter: document.getElementById("categoryFilter"),
       sortFilter: document.getElementById("sortFilter"),
       heroHomeLink: document.getElementById("heroHomeLink"),
       headerMainDownload: document.getElementById("headerMainDownload"),
       recommendedGrid: document.getElementById("recommendedGrid"),
+      recommendedSection: document.getElementById("recommendedSection"),
+      essentialsControls: document.getElementById("essentialsControls"),
+      essentialsSelectedVersion: document.getElementById("essentialsSelectedVersion"),
+      essentialsVersionRange: document.getElementById("essentialsVersionRange"),
+      essentialsApplyButton: document.getElementById("essentialsApplyButton"),
+      essentialsResultsSummary: document.getElementById("essentialsResultsSummary"),
+      promoCarousel: document.getElementById("promoCarousel"),
+      promoCarouselImage: document.getElementById("promoCarouselImage"),
+      promoCarouselTitle: document.getElementById("promoCarouselTitle"),
+      promoCarouselDescription: document.getElementById("promoCarouselDescription"),
+      moreAppsSection: document.getElementById("moreAppsSection"),
+      moreAppsGrid: document.getElementById("moreAppsGrid"),
       catalogSection: document.getElementById("catalog"),
       catalogGrid: document.getElementById("catalogGrid"),
+      downloadsPanel: document.getElementById("downloadsPanel"),
+      downloadsList: document.getElementById("downloadsList"),
+      marketNav: document.getElementById("marketNav"),
       logoWall: document.getElementById("logoWall"),
       logoFilterStatus: document.getElementById("logoFilterStatus"),
       footerYear: document.getElementById("footerYear"),
@@ -1296,6 +2681,12 @@
       modalDescription: document.getElementById("modalDescription"),
       modalInstallBtn: document.getElementById("modalInstallBtn"),
       modalCopyBtn: document.getElementById("modalCopyBtn"),
+      fullImageGallery: document.getElementById("fullImageGallery"),
+      fullGalleryImage: document.getElementById("fullGalleryImage"),
+      fullGalleryPrev: document.getElementById("fullGalleryPrev"),
+      fullGalleryNext: document.getElementById("fullGalleryNext"),
+      fullGalleryControls: document.getElementById("fullGalleryControls"),
+      fullGalleryClose: document.getElementById("fullGalleryClose"),
       marketVariantModal: document.getElementById("marketVariantModal"),
       marketVariantNormalBtn: document.getElementById("marketVariantNormalBtn"),
       marketVariantGingerBtn: document.getElementById("marketVariantGingerBtn"),
@@ -1446,6 +2837,181 @@
         dom.modalMainShot.onerror = null;
         dom.modalMainShot.src = FALLBACK_SHOT;
       };
+    }
+
+    function assetFileKey(rawUrl) {
+      try {
+        const file = decodeURIComponent(new URL(rawUrl, window.location.href).pathname.split("/").pop() || "");
+        return file
+          .replace(/\.[a-z0-9]{2,8}$/i, "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "")
+          .replace(/c[123]$/, "");
+      } catch (_error) {
+        return "";
+      }
+    }
+
+    function promoScreenshotMatchesApp(app, screenshotUrl) {
+      const screenshotKey = assetFileKey(screenshotUrl);
+      if (!screenshotKey || screenshotKey === "default" || screenshotKey.length < 3) return false;
+
+      const iconKey = assetFileKey(app.iconName);
+      if (iconKey && (screenshotKey.includes(iconKey) || iconKey.includes(screenshotKey))) return true;
+
+      const appNameKey = normalizeSearchText(app.name).replace(/[^a-z0-9]/g, "");
+      if (appNameKey === "googlemaps" && screenshotKey.includes("gmap")) return true;
+
+      const nameParts = tokenizeSearchText(app.name)
+        .filter((part) => part.length >= 4 || part === "iii")
+        .map((part) => part.replace(/[^a-z0-9]/g, ""));
+      return nameParts.some((part) => part && screenshotKey.includes(part));
+    }
+
+    function getPromoImageUrl(app) {
+      if (app.promoImage) return app.promoImage;
+      const matchingScreenshot = getScreenshotUrls(app).find((url) => promoScreenshotMatchesApp(app, url));
+      return matchingScreenshot || getAppIconUrl(app) || "market2-assets/ic_vm_thumbnail_promo.png";
+    }
+
+    function getPromoDescription(app) {
+      const description = sanitizeDescription(app.description);
+      if (description) return description;
+      return safeText(app.developer, "Android Market") + " · " + categoryLabel(app.category) + " · Android " + safeText(app.minAndroid, "?");
+    }
+
+    function stopPromoCycling() {
+      if (state.promoTimer) {
+        clearInterval(state.promoTimer);
+        state.promoTimer = null;
+      }
+    }
+
+    function renderPromoCarousel(animate = false) {
+      if (!dom.promoCarousel) return;
+      const canShow = state.marketView !== "downloads" && state.promoApps.length > 0;
+      dom.promoCarousel.hidden = !canShow;
+      if (!canShow) return;
+
+      state.promoIndex = state.promoIndex % state.promoApps.length;
+      const app = state.promoApps[state.promoIndex];
+      const image = getPromoImageUrl(app);
+      const slideKey = String(app.id || app.name) + "|" + image;
+      if (dom.promoCarousel.dataset.slideKey === slideKey) return;
+
+      const renderToken = ++state.promoRenderToken;
+      const showSlide = (source) => {
+        if (renderToken !== state.promoRenderToken) return;
+        dom.promoCarouselImage.src = source;
+        dom.promoCarouselImage.alt = safeText(app.name, "Featured app");
+        dom.promoCarouselTitle.textContent = safeText(app.name, "Featured");
+        dom.promoCarouselDescription.textContent = getPromoDescription(app);
+        dom.promoCarousel.dataset.slideKey = slideKey;
+
+        if (animate) {
+          dom.promoCarousel.classList.remove("is-changing");
+          void dom.promoCarousel.offsetWidth;
+          dom.promoCarousel.classList.add("is-changing");
+          clearTimeout(state.promoAnimationTimer);
+          state.promoAnimationTimer = setTimeout(() => {
+            dom.promoCarousel.classList.remove("is-changing");
+          }, 650);
+        }
+      };
+
+      if (state.promoImageCache.has(image)) {
+        showSlide(image);
+        return;
+      }
+
+      const preloader = new Image();
+      preloader.onload = () => {
+        state.promoImageCache.set(image, true);
+        showSlide(image);
+      };
+      preloader.onerror = () => {
+        const fallback = getAppIconUrl(app) || "market2-assets/ic_vm_thumbnail_promo.png";
+        state.promoImageCache.set(fallback, true);
+        showSlide(fallback);
+      };
+      preloader.src = image;
+    }
+
+    function startPromoCycling() {
+      stopPromoCycling();
+      if (state.promoApps.length < 2) return;
+      const scheduleNextPromo = () => {
+        state.promoTimer = setTimeout(() => {
+          if (document.hidden || dom.promoCarousel.hidden) {
+            scheduleNextPromo();
+            return;
+          }
+          state.promoIndex = (state.promoIndex + 1) % state.promoApps.length;
+          renderPromoCarousel(true);
+          scheduleNextPromo();
+        }, 7000);
+      };
+      scheduleNextPromo();
+    }
+
+    function setupPromoCarousel() {
+      /* The rotating banners are promotional artwork, not application cards. */
+    }
+
+    function updateFullGalleryControls() {
+      if (!dom.fullGalleryPrev || !dom.fullGalleryNext) return;
+      dom.fullGalleryPrev.classList.toggle("controls-hidden", state.galleryIndex <= 0);
+      dom.fullGalleryNext.classList.toggle(
+        "controls-hidden",
+        state.galleryIndex >= state.galleryScreenshots.length - 1
+      );
+    }
+
+    function showFullGalleryControls() {
+      if (!dom.fullGalleryControls) return;
+      dom.fullGalleryControls.classList.remove("controls-hidden");
+      updateFullGalleryControls();
+      clearTimeout(state.galleryControlsTimer);
+      state.galleryControlsTimer = setTimeout(() => {
+        dom.fullGalleryControls.classList.add("controls-hidden");
+        dom.fullGalleryPrev.classList.add("controls-hidden");
+        dom.fullGalleryNext.classList.add("controls-hidden");
+      }, 1500);
+    }
+
+    function setFullGalleryImage(index, animate = true) {
+      if (!dom.fullGalleryImage || !state.galleryScreenshots.length) return;
+      state.galleryIndex = Math.max(0, Math.min(state.galleryScreenshots.length - 1, index));
+      const source = state.galleryScreenshots[state.galleryIndex];
+      dom.fullGalleryImage.src = source;
+      dom.fullGalleryImage.alt = "Screenshot " + (state.galleryIndex + 1);
+      if (animate) {
+        dom.fullGalleryImage.classList.remove("is-changing");
+        void dom.fullGalleryImage.offsetWidth;
+        dom.fullGalleryImage.classList.add("is-changing");
+      }
+      updateFullGalleryControls();
+      showFullGalleryControls();
+    }
+
+    function openFullImageGallery(screenshots, index = 0) {
+      if (!dom.fullImageGallery || !screenshots.length) return;
+      state.galleryScreenshots = screenshots.slice();
+      state.galleryIndex = 0;
+      dom.fullImageGallery.classList.remove("hidden");
+      dom.fullImageGallery.setAttribute("aria-hidden", "false");
+      document.body.classList.add("gallery-open");
+      setFullGalleryImage(index, false);
+    }
+
+    function closeFullImageGallery() {
+      if (!dom.fullImageGallery) return;
+      dom.fullImageGallery.classList.add("hidden");
+      dom.fullImageGallery.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("gallery-open");
+      clearTimeout(state.galleryControlsTimer);
+      state.galleryScreenshots = [];
+      state.galleryIndex = 0;
     }
 
     function starsToGlyph(rawStars) {
@@ -2430,12 +3996,135 @@
       return img;
     }
 
-    function appToSearchText(app) {
-      return [app.name, app.developer, app.description, app.category, app.minAndroid].join(" ").toLowerCase();
+    function normalizeSearchText(value) {
+      return String(value || "")
+        .normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/&/g, " and ")
+        .replace(/[^a-z0-9.]+/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
     }
 
-    function sortAppsForView(apps) {
+    function tokenizeSearchText(value) {
+      return normalizeSearchText(value).match(/[a-z0-9]+(?:\.[a-z0-9]+)+|[a-z0-9]+/g) || [];
+    }
+
+    function appSearchFields(app) {
+      const categoryAliases = {
+        apps: "apps app aplicaciones application",
+        games: "games game juegos juego",
+        books: "books book libros libro",
+        movies: "movies movie peliculas pelicula"
+      };
+      return {
+        name: normalizeSearchText(app.name),
+        developer: normalizeSearchText(app.developer),
+        description: normalizeSearchText(app.description),
+        category: normalizeSearchText((app.category || "") + " " + (categoryAliases[app.category] || "")),
+        android: normalizeSearchText("android " + app.minAndroid),
+        version: normalizeSearchText(app.appVersion),
+        packageName: normalizeSearchText(app.packageName),
+        all: normalizeSearchText([
+          app.name,
+          app.developer,
+          app.description,
+          app.category,
+          categoryAliases[app.category],
+          app.minAndroid,
+          app.appVersion,
+          app.packageName,
+          app.obbUrl
+        ].join(" "))
+      };
+    }
+
+    function buildSearchIndex(apps) {
+      const index = new Map();
+      apps.forEach((app) => {
+        const fields = appSearchFields(app);
+        index.set(app, {
+          fields,
+          tokens: new Set(tokenizeSearchText(fields.all)),
+          tokensByField: Object.fromEntries(
+            Object.entries(fields).map(([fieldName, value]) => [fieldName, tokenizeSearchText(value)])
+          )
+        });
+      });
+      return index;
+    }
+
+    function levenshteinDistance(left, right) {
+      if (left === right) return 0;
+      if (!left) return right.length;
+      if (!right) return left.length;
+      if (left.length > right.length) return levenshteinDistance(right, left);
+
+      let previous = Array.from({ length: left.length + 1 }, (_, i) => i);
+      for (let j = 1; j <= right.length; j += 1) {
+        const current = [j];
+        for (let i = 1; i <= left.length; i += 1) {
+          current[i] = Math.min(
+            current[i - 1] + 1,
+            previous[i] + 1,
+            previous[i - 1] + (left[i - 1] === right[j - 1] ? 0 : 1)
+          );
+        }
+        previous = current;
+      }
+      return previous[left.length];
+    }
+
+    function searchTermScore(term, record) {
+      const fieldWeights = [
+        ["name", 100],
+        ["developer", 75],
+        ["packageName", 62],
+        ["category", 48],
+        ["android", 42],
+        ["version", 35],
+        ["description", 25]
+      ];
+      let best = 0;
+      for (const [fieldName, weight] of fieldWeights) {
+        const value = record.fields[fieldName];
+        if (!value) continue;
+        const tokens = record.tokensByField && record.tokensByField[fieldName]
+          ? record.tokensByField[fieldName]
+          : tokenizeSearchText(value);
+        if (tokens.includes(term)) best = Math.max(best, weight);
+        else if (tokens.some((token) => token.startsWith(term))) best = Math.max(best, weight * 0.72);
+        else if (term.length >= 4 && tokens.some((token) => {
+          const distance = levenshteinDistance(term, token);
+          return distance <= Math.max(1, Math.floor(term.length / 4));
+        })) best = Math.max(best, weight * 0.42);
+        else if (value.includes(term)) best = Math.max(best, weight * 0.35);
+      }
+      return best;
+    }
+
+    function scoreAppSearch(app, rawQuery) {
+      const terms = tokenizeSearchText(rawQuery);
+      if (!terms.length) return 0;
+      const record = state.searchIndex.get(app) || { fields: appSearchFields(app), tokens: new Set() };
+      const scores = terms.map((term) => searchTermScore(term, record));
+      if (scores.some((score) => score === 0)) return 0;
+      const phraseBonus = record.fields.name.includes(normalizeSearchText(rawQuery)) ? 45 : 0;
+      return scores.reduce((total, score) => total + score, 0) + phraseBonus;
+    }
+
+    function appToSearchText(app) {
+      const record = state.searchIndex.get(app);
+      return record ? record.fields.all : appSearchFields(app).all;
+    }
+
+    function sortAppsForView(apps, scores = null) {
       const clone = apps.slice();
+      if (scores) {
+        clone.sort((a, b) => (scores.get(b) || 0) - (scores.get(a) || 0) || compareApps(a, b));
+        return clone;
+      }
       if (state.sort === "stars") {
         clone.sort((a, b) => {
           const left = parseFloat(String(a.stars).replace(",", ".")) || 0;
@@ -2451,10 +4140,11 @@
     }
 
     function getFilteredApps(baseApps) {
-      const query = state.query.trim().toLowerCase();
-      return sortAppsForView(
-        baseApps.filter((app) => {
+      const query = normalizeSearchText(state.query);
+      const scores = query ? new Map() : null;
+      const filtered = baseApps.filter((app) => {
           if (state.category !== "all" && app.category !== state.category) return false;
+          if (state.essentialsAppliedApi && parseAndroidApi(app.minAndroid) > state.essentialsAppliedApi) return false;
           if (
             state.selectedAndroidVersionToken &&
             !matchesAndroidVersionFilter(app.minAndroid, state.selectedAndroidVersionToken)
@@ -2462,9 +4152,11 @@
             return false;
           }
           if (!query) return true;
-          return appToSearchText(app).includes(query);
-        })
-      );
+          const score = scoreAppSearch(app, query);
+          scores.set(app, score);
+          return score > 0;
+        });
+      return sortAppsForView(filtered, scores);
     }
 
     function getCatalogBaseApps() {
@@ -2520,7 +4212,11 @@
         if (app.isVerified) {
           const verified = document.createElement("span");
           verified.className = "mini-chip verified";
-          verified.textContent = "Verified";
+          const verifiedIcon = document.createElement("img");
+          verifiedIcon.src = "market2-assets/verificado.png";
+          verifiedIcon.alt = "";
+          verifiedIcon.setAttribute("aria-hidden", "true");
+          verified.append(verifiedIcon, document.createTextNode("Verified"));
           meta.appendChild(verified);
         }
         if (appHasObb) {
@@ -2546,6 +4242,7 @@
         installBtn.target = "_blank";
         installBtn.rel = "noopener";
         installBtn.textContent = appHasObb ? "Download APK+OBB (.zip)" : install.label;
+        installBtn.addEventListener("click", () => recordDownload(app));
 
         if (appHasObb) {
           installBtn.href = "#";
@@ -2587,9 +4284,165 @@
       dom.headerMainDownload.title = main.label;
     }
 
+    function loadDownloadHistory() {
+      try {
+        const stored = JSON.parse(localStorage.getItem("android-market-downloads") || "[]");
+        state.downloads = Array.isArray(stored) ? stored.slice(0, 30) : [];
+      } catch (_error) {
+        state.downloads = [];
+      }
+    }
+
+    function recordDownload(app) {
+      if (!app) return;
+      const install = buildInstallInfo(app.packageName);
+      if (!install.href && !hasObbData(app)) return;
+      const entry = {
+        id: app.id,
+        name: safeText(app.name, "Unnamed"),
+        href: install.href || "#",
+        type: hasObbData(app) ? "APK + OBB" : install.label,
+        timestamp: new Date().toISOString()
+      };
+      state.downloads = [entry, ...state.downloads.filter((item) => item.id !== entry.id)].slice(0, 30);
+      try {
+        localStorage.setItem("android-market-downloads", JSON.stringify(state.downloads));
+      } catch (_error) {
+        /* Private browsing can disable localStorage; the in-memory list still works. */
+      }
+    }
+
+    function renderDownloads() {
+      if (!dom.downloadsList) return;
+      dom.downloadsList.innerHTML = "";
+      if (!state.downloads.length) {
+        dom.downloadsList.appendChild(createEmptyBox("No downloads yet."));
+        return;
+      }
+      const fragment = document.createDocumentFragment();
+      state.downloads.forEach((entry) => {
+        const row = document.createElement("div");
+        row.className = "download-row";
+        const title = document.createElement("strong");
+        title.textContent = safeText(entry.name, "Download");
+        const meta = document.createElement("span");
+        const date = new Date(entry.timestamp);
+        meta.textContent = safeText(entry.type, "Download") + " · " + (Number.isNaN(date.getTime()) ? "" : date.toLocaleString());
+        const link = document.createElement("a");
+        link.className = "download-row-link";
+        link.href = entry.href || "#";
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.textContent = "Open";
+        row.append(title, meta, link);
+        fragment.appendChild(row);
+      });
+      dom.downloadsList.appendChild(fragment);
+    }
+
+    function getEssentialsVersion(index) {
+      return ANDROID_ESSENTIALS_VERSIONS[Math.max(0, Math.min(ANDROID_ESSENTIALS_VERSIONS.length - 1, index))];
+    }
+
+    function updateEssentialsSelection() {
+      if (!dom.essentialsVersionRange || !dom.essentialsSelectedVersion) return;
+      const index = Number(dom.essentialsVersionRange.value) || 0;
+      state.essentialsVersionIndex = index;
+      const selected = getEssentialsVersion(index);
+      dom.essentialsSelectedVersion.textContent = "Android " + selected[0];
+      if (dom.essentialsResultsSummary && !state.essentialsAppliedApi) {
+        dom.essentialsResultsSummary.textContent = "Tap Apply to show apps compatible with Android " + selected[0] + ".";
+      }
+    }
+
+    function applyEssentialsFilter() {
+      const selected = getEssentialsVersion(state.essentialsVersionIndex);
+      state.essentialsAppliedApi = selected[1];
+      state.marketView = "featured";
+      state.category = "all";
+      state.query = "";
+      state.showAllCatalog = false;
+      state.selectedAndroidVersionToken = "";
+      dom.topbarSearchInput.value = "";
+      dom.categoryFilter.value = "all";
+      const compatible = state.allApps.filter((app) => parseAndroidApi(app.minAndroid) <= state.essentialsAppliedApi).length;
+      if (dom.essentialsResultsSummary) {
+        dom.essentialsResultsSummary.textContent = "Compatible apps: " + compatible + " of " + state.allApps.length + " for Android " + selected[0];
+      }
+      renderAll();
+    }
+
+    function setupEssentialsControls() {
+      if (!dom.essentialsVersionRange) return;
+      dom.essentialsVersionRange.addEventListener("input", updateEssentialsSelection);
+      dom.essentialsApplyButton.addEventListener("click", applyEssentialsFilter);
+      updateEssentialsSelection();
+    }
+
+    function updateMarketNav() {
+      if (!dom.marketNav) return;
+      dom.marketNav.querySelectorAll(".market-nav-button").forEach((button) => {
+        const view = button.dataset.marketView;
+        const category = button.dataset.marketCategory;
+        const active = view === "downloads"
+          ? state.marketView === "downloads"
+          : view === "featured"
+            ? state.marketView === "featured" && state.category === "all"
+            : state.marketView === "catalog" && state.category === category;
+        button.classList.toggle("active", active);
+      });
+    }
+
+    function setupMarketNavigation() {
+      if (!dom.marketNav) return;
+      dom.marketNav.querySelectorAll(".market-nav-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          const category = button.dataset.marketCategory || "all";
+          const view = button.dataset.marketView || "catalog";
+          state.marketView = view === "downloads" ? "downloads" : view === "featured" ? "featured" : "catalog";
+          state.query = "";
+          state.category = category;
+          state.showAllCatalog = state.marketView === "catalog";
+          state.essentialsAppliedApi = 0;
+          state.selectedAndroidVersionToken = "";
+          state.selectedAndroidVersionLabel = "";
+          dom.topbarSearchInput.value = "";
+          dom.categoryFilter.value = category;
+          renderAll();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      });
+    }
+
     function renderAll() {
-      renderAppCards(dom.recommendedGrid, getFilteredApps(state.recommendedApps));
+      const showingDownloads = state.marketView === "downloads";
+      renderPromoCarousel(false);
+      if (dom.downloadsPanel) dom.downloadsPanel.hidden = !showingDownloads;
+      if (showingDownloads) {
+        if (dom.recommendedSection) dom.recommendedSection.hidden = true;
+        if (dom.moreAppsSection) dom.moreAppsSection.hidden = true;
+        if (dom.catalogSection) dom.catalogSection.hidden = true;
+        renderDownloads();
+        updateMarketNav();
+        updateLogoFilterStatus();
+        return;
+      }
       const showCatalog = state.showAllCatalog || Boolean(state.selectedAndroidVersionToken);
+      if (dom.essentialsControls) dom.essentialsControls.hidden = state.marketView !== "featured";
+      if (dom.recommendedSection) dom.recommendedSection.hidden = showCatalog;
+      if (!showCatalog) {
+        const featuredApps = state.essentialsAppliedApi ? state.allApps : state.recommendedApps;
+        renderAppCards(dom.recommendedGrid, getFilteredApps(featuredApps));
+      }
+      const showMoreApps = state.marketView === "featured" && !showCatalog && !state.essentialsAppliedApi;
+      if (dom.moreAppsSection) dom.moreAppsSection.hidden = !showMoreApps;
+      if (dom.moreAppsGrid) {
+        if (showMoreApps) {
+          renderAppCards(dom.moreAppsGrid, getFilteredApps(state.normalApps));
+        } else {
+          dom.moreAppsGrid.innerHTML = "";
+        }
+      }
       if (dom.catalogSection) {
         dom.catalogSection.hidden = !showCatalog;
       }
@@ -2599,6 +4452,7 @@
         dom.catalogGrid.innerHTML = "";
       }
       updateLogoFilterStatus();
+      updateMarketNav();
     }
 
     function resetToInitialHomeState() {
@@ -2606,12 +4460,17 @@
       state.category = "all";
       state.sort = "alpha";
       state.showAllCatalog = false;
+      state.marketView = "featured";
+      state.essentialsAppliedApi = 0;
       state.selectedAndroidVersionToken = "";
       state.selectedAndroidVersionLabel = "";
 
       dom.topbarSearchInput.value = "";
+      if (dom.marketSearchPanel) dom.marketSearchPanel.hidden = true;
       dom.categoryFilter.value = "all";
       dom.sortFilter.value = "alpha";
+      if (dom.essentialsVersionRange) dom.essentialsVersionRange.value = String(state.essentialsVersionIndex);
+      updateEssentialsSelection();
 
       renderLogoWall();
       renderAll();
@@ -2626,22 +4485,50 @@
 
       function applySearchFromInput() {
         syncTopbarState();
+        state.marketView = "catalog";
         state.showAllCatalog = true;
         renderAll();
       }
 
+      function toggleSearchPanel() {
+        if (!dom.marketSearchPanel) {
+          applySearchFromInput();
+          return;
+        }
+        dom.topbarSearchInput.focus();
+        if (dom.topbarSearchInput.value.trim()) applySearchFromInput();
+      }
+
       function applyTopbarFilterChange() {
         syncTopbarState();
+        state.marketView = state.category === "all" ? "featured" : "catalog";
+        state.showAllCatalog = state.category !== "all" || Boolean(state.query.trim());
         renderAll();
       }
 
-      dom.topbarSearchBtn.addEventListener("click", applySearchFromInput);
+      if (dom.marketHomeLink) {
+        dom.marketHomeLink.addEventListener("click", (event) => {
+          event.preventDefault();
+          resetToInitialHomeState();
+          window.history.replaceState(null, "", "#home");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }
+      dom.topbarSearchBtn.addEventListener("click", toggleSearchPanel);
+      if (dom.marketSearchApply) dom.marketSearchApply.addEventListener("click", applySearchFromInput);
+      let searchTimer = null;
+      dom.topbarSearchInput.addEventListener("input", () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(applySearchFromInput, 160);
+      });
       dom.topbarSearchInput.addEventListener("keydown", (event) => {
         if (event.key !== "Enter") return;
         applySearchFromInput();
       });
       dom.categoryFilter.addEventListener("change", applyTopbarFilterChange);
       dom.sortFilter.addEventListener("change", applyTopbarFilterChange);
+      setupMarketNavigation();
+      setupEssentialsControls();
 
       if (dom.heroHomeLink) {
         dom.heroHomeLink.addEventListener("click", (event) => {
@@ -2706,6 +4593,7 @@
       dom.modalDescription.textContent = sanitizeDescription(description);
 
       dom.modalInstallBtn.dataset.installMode = appHasObb ? "zip_obb" : "normal";
+      dom.modalInstallBtn.onclick = () => recordDownload(app);
       if (appHasObb) {
         dom.modalInstallBtn.textContent = "Download APK+OBB (.zip)";
         dom.modalInstallBtn.dataset.installType = "";
@@ -2734,12 +4622,13 @@
       dom.modalMediaHint.hidden = screenshots.length > 0;
 
       dom.modalThumbs.innerHTML = "";
-      dom.modalThumbs.hidden = screenshots.length <= 1;
+      dom.modalThumbs.hidden = screenshots.length === 0;
       screenshots.forEach((src, idx) => {
         const thumb = makeImage(src, "Screenshot " + (idx + 1), "", FALLBACK_SHOT);
         if (idx === 0) thumb.classList.add("active");
         thumb.addEventListener("click", () => {
           setModalMainShot(src, "Screenshot of " + safeText(app.name, "app"));
+          openFullImageGallery(screenshots, idx);
           Array.from(dom.modalThumbs.children).forEach((el) => el.classList.remove("active"));
           thumb.classList.add("active");
         });
@@ -2752,6 +4641,7 @@
     }
 
     function closeModal() {
+      closeFullImageGallery();
       state.currentModalApp = null;
       dom.appModal.classList.add("hidden");
       dom.appModal.setAttribute("aria-hidden", "true");
@@ -2789,7 +4679,27 @@
       dom.appModal.addEventListener("click", (event) => {
         if (event.target === dom.appModal) closeModal();
       });
+      dom.fullGalleryClose.addEventListener("click", closeFullImageGallery);
+      dom.fullGalleryPrev.addEventListener("click", (event) => {
+        event.stopPropagation();
+        setFullGalleryImage(state.galleryIndex - 1);
+      });
+      dom.fullGalleryNext.addEventListener("click", (event) => {
+        event.stopPropagation();
+        setFullGalleryImage(state.galleryIndex + 1);
+      });
+      dom.fullImageGallery.addEventListener("click", (event) => {
+        if (event.target === dom.fullImageGallery || event.target === dom.fullGalleryImage) {
+          showFullGalleryControls();
+        }
+      });
       window.addEventListener("keydown", (event) => {
+        if (dom.fullImageGallery && !dom.fullImageGallery.classList.contains("hidden")) {
+          if (event.key === "Escape") closeFullImageGallery();
+          if (event.key === "ArrowLeft") setFullGalleryImage(state.galleryIndex - 1);
+          if (event.key === "ArrowRight") setFullGalleryImage(state.galleryIndex + 1);
+          return;
+        }
         if (event.key === "Escape") closeModal();
       });
 
@@ -2898,10 +4808,19 @@
 
     async function bootstrap() {
       dom.footerYear.textContent = String(new Date().getFullYear());
+      loadDownloadHistory();
       renderLogoWall();
       setupFilters();
+      setupPromoCarousel();
       setupModal();
       setupMarketVariantModal();
+
+      state.promoApps = MARKET_AD_IMAGES.map((promoImage, index) => ({
+        id: "market-ad-" + index,
+        promoImage,
+        name: "",
+        description: ""
+      }));
 
       const { text, source } = await loadAppsTxt();
       state.sourceLabel = source;
@@ -2911,6 +4830,7 @@
         state.recommendedApps = [];
         state.normalApps = [];
         state.marketSpec = null;
+        startPromoCycling();
         setMainDownloadButtons();
         updateStats();
         renderAll();
@@ -2924,6 +4844,8 @@
       state.recommendedApps = parsed.recommended;
       state.normalApps = parsed.normal;
       state.allApps = [...parsed.recommended, ...parsed.normal];
+      state.searchIndex = buildSearchIndex(state.allApps);
+      startPromoCycling();
 
       setMainDownloadButtons();
       updateStats();
